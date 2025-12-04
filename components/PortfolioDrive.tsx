@@ -28,7 +28,7 @@ const DEFAULT_VIDEOS: DriveVideo[] = [
   },
 ];
 
-const LOCAL_STORAGE_KEY = 'guizera_drive_videos_v17';
+const LOCAL_STORAGE_KEY = 'guizera_drive_videos_v18';
 
 const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
   const [videos, setVideos] = useState<DriveVideo[]>(DEFAULT_VIDEOS);
@@ -157,7 +157,7 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
                 </button>
               )}
 
-              <div className="relative aspect-video bg-black w-full">
+              <div className="relative aspect-video bg-black w-full overflow-hidden">
                 {/* Thumbnail Layer - Using iframe as thumb since Drive doesn't give images easily */}
                 <div className="absolute inset-0 pointer-events-none opacity-80 group-hover:opacity-60 transition-opacity">
                     <iframe
@@ -166,6 +166,7 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
                     title={video.title}
                     tabIndex={-1}
                     loading="lazy"
+                    sandbox="allow-scripts allow-same-origin"
                     ></iframe>
                 </div>
                 
@@ -242,17 +243,20 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
                     <iframe
                         key={selectedVideo.id} 
                         src={getDriveEmbedUrl(selectedVideo.driveId)} 
-                        className="w-full h-full relative z-10"
+                        className="w-full h-full relative z-10 bg-black"
                         onLoad={() => setIsVideoLoading(false)}
-                        allow="autoplay; fullscreen; picture-in-picture"
+                        allow="autoplay; fullscreen; picture-in-picture; encrypted-media; accelerometer; gyroscope"
+                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
+                        referrerPolicy="no-referrer"
                         allowFullScreen
+                        loading="eager"
                         title={selectedVideo.title}
                     ></iframe>
                 </div>
                 
                 <div className="mt-4 text-center w-full">
                     <p className="text-gray-500 text-xs">
-                        * Se o vídeo não iniciar, tente clicar no link "Abrir no Drive".
+                        * Se o player apresentar lentidão, use o botão "Abrir no Drive".
                     </p>
                 </div>
             </div>

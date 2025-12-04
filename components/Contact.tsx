@@ -20,6 +20,13 @@ const Contact: React.FC = () => {
     const phone = "5511999999999"; // Substitua pelo número real se necessário
     const text = `Olá Guizera Films!%0A%0AMeu nome é *${formData.name}*.%0AEmail: ${formData.email}%0A%0A*Mensagem:*%0A${formData.message}`;
     window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+    
+    // Clear form after sending
+    setFormData({
+      name: '',
+      email: '',
+      message: ''
+    });
   };
 
   return (
