@@ -1,115 +1,99 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Film } from 'lucide-react';
+import React, { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
 const Header: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-
     const targetElement = document.getElementById(targetId);
     if (targetElement) {
-      const headerOffset = 90; // Height of header + some padding
+      const headerOffset = 80;
       const elementPosition = targetElement.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
     }
   };
 
   const navLinks = [
-    { name: 'Sobre', href: 'sobre' },
+    { name: 'Home', href: 'hero' },
     { name: 'Portfólio', href: 'portfolio' },
-    { name: 'Serviços', href: 'servicos' },
+    { name: 'Verticais', href: 'verticais' },
     { name: 'Contato', href: 'contato' },
   ];
 
   return (
-    <header 
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-bgDark/95 backdrop-blur-md shadow-lg py-4 border-b border-white/5' : 'bg-transparent py-6'
-      }`}
-    >
-      <div className="container mx-auto px-6 flex justify-between items-center">
+    <header className="fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10 h-20">
+      <div className="container mx-auto px-6 h-full flex justify-between items-center">
+        
+        {/* LOGO */}
         <a 
           href="#" 
-          onClick={(e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-          className="flex items-center gap-2 group"
+          onClick={(e) => handleNavClick(e, 'hero')}
+          className="flex items-center gap-2 group z-50"
         >
-          <Film className="w-8 h-8 text-primary group-hover:text-white transition-colors" />
-          <span className="font-heading font-bold text-xl md:text-2xl tracking-tighter text-white">
-            GUIZERA <span className="text-primary">FILMS</span>
+          <span className="font-heading font-bold text-xl tracking-widest text-white group-hover:text-gray-300 transition-colors">
+            GUIZERA<span className="text-neon">FILMS</span>
           </span>
         </a>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        {/* DESKTOP NAV (CENTER) */}
+        <nav className="hidden md:flex items-center gap-10 absolute left-1/2 transform -translate-x-1/2">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
               href={`#${link.href}`}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="text-gray-300 hover:text-white font-medium text-sm uppercase tracking-widest transition-colors hover:text-shadow-glow"
+              className="text-gray-400 hover:text-white font-heading font-medium text-xs uppercase tracking-widest transition-colors duration-300"
             >
               {link.name}
             </a>
           ))}
-          <a 
-            href="#portfolio"
-            onClick={(e) => handleNavClick(e, 'portfolio')}
-            className="px-6 py-2 bg-gradient-to-r from-primary to-deepBlue rounded-full font-bold text-white text-sm hover:opacity-90 transition-opacity hover:scale-105 transform duration-200"
-          >
-            Ver Projetos
-          </a>
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* CTA BUTTON (RIGHT) */}
+        <div className="hidden md:block">
+            <a 
+                href="#contato"
+                onClick={(e) => handleNavClick(e, 'contato')}
+                className="bg-neon hover:bg-neonHover text-white font-heading font-bold text-xs px-6 py-3 uppercase tracking-widest transition-all duration-300 transform hover:scale-105"
+            >
+                Orçamento
+            </a>
+        </div>
+
+        {/* MOBILE MENU BUTTON */}
         <button 
-          className="md:hidden text-white"
+          className="md:hidden text-white z-50 relative"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-      </div>
 
-      {/* Mobile Nav Overlay */}
-      {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-bgDark border-t border-white/10 p-6 flex flex-col gap-6 shadow-2xl animate-fade-in">
-          {navLinks.map((link) => (
+        {/* MOBILE NAV OVERLAY */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 bg-black/95 z-40 flex flex-col items-center justify-center gap-8 animate-fade-in">
+            {navLinks.map((link) => (
+              <a 
+                key={link.name} 
+                href={`#${link.href}`}
+                className="text-white font-heading font-light text-2xl uppercase tracking-widest hover:text-neon transition-colors"
+                onClick={(e) => handleNavClick(e, link.href)}
+              >
+                {link.name}
+              </a>
+            ))}
             <a 
-              key={link.name} 
-              href={`#${link.href}`}
-              className="text-white font-heading font-bold text-lg py-2 border-b border-white/5"
-              onClick={(e) => handleNavClick(e, link.href)}
+                href="#contato"
+                onClick={(e) => handleNavClick(e, 'contato')}
+                className="mt-8 bg-neon text-white font-heading font-bold text-sm px-10 py-4 uppercase tracking-widest"
             >
-              {link.name}
+                Orçamento
             </a>
-          ))}
-          <a 
-            href="#portfolio"
-            onClick={(e) => handleNavClick(e, 'portfolio')}
-            className="text-primary font-heading font-bold text-lg py-2"
-          >
-            Ver Projetos
-          </a>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </header>
   );
 };

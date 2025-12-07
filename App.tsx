@@ -19,20 +19,20 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-bgDark min-h-screen text-white font-sans selection:bg-primary selection:text-white">
+    <div className="bg-black min-h-screen text-white font-sans selection:bg-neon selection:text-white">
       <Header />
       <main>
         <Hero />
-        <About />
         <PortfolioDrive isAdmin={isAdmin} />
         <PortfolioInsta isAdmin={isAdmin} />
+        <About />
         <Services />
         <Contact />
       </main>
       <Footer />
       {isAdmin && (
-        <div className="fixed bottom-4 right-4 bg-primary text-white text-xs px-3 py-1 rounded-full z-50 opacity-70 pointer-events-none shadow-lg font-bold border border-white/20">
-          MODO ADMIN ATIVO
+        <div className="fixed bottom-4 right-4 bg-neon text-white text-[10px] px-3 py-1 uppercase tracking-widest z-50 opacity-70 pointer-events-none shadow-lg font-bold">
+          Admin Mode
         </div>
       )}
     </div>

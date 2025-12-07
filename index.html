@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Guizera Films | Produtora Audiovisual</title>
+    <title>GUIZERA FILMS | Visual Cinematográfico</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,20 +19,24 @@
         theme: {
           extend: {
             colors: {
-              primary: '#990adc',
-              primaryDark: '#600db1',
-              deepBlue: '#171876',
-              bgDark: '#140424',
+              black: '#000000',
+              neon: '#8257e5',
+              neonHover: '#6938d6',
+              darkGray: '#121212',
               white: '#ffffff',
+              grayText: '#a1a1a1'
             },
             fontFamily: {
-              sans: ['Manrope', 'sans-serif'],
-              heading: ['Sora', 'sans-serif'],
+              sans: ['Inter', 'sans-serif'],
+              heading: ['Montserrat', 'sans-serif'],
+            },
+            letterSpacing: {
+              widest: '0.2em',
+              mega: '0.3em',
             },
             animation: {
-              'fade-in': 'fadeIn 1s ease-out forwards',
+              'fade-in': 'fadeIn 0.8s ease-out forwards',
               'slide-up': 'slideUp 0.8s ease-out forwards',
-              'float': 'float 6s ease-in-out infinite',
             },
             keyframes: {
               fadeIn: {
@@ -40,12 +44,8 @@
                 '100%': { opacity: '1' },
               },
               slideUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '0%': { opacity: '0', transform: 'translateY(30px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-10px)' },
               }
             }
           }
@@ -54,22 +54,22 @@
     </script>
     <style>
       body {
-        background-color: #140424;
+        background-color: #000000;
         color: #ffffff;
       }
       /* Custom scrollbar */
       ::-webkit-scrollbar {
-        width: 10px;
+        width: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #140424;
+        background: #000000;
       }
       ::-webkit-scrollbar-thumb {
-        background: #600db1;
-        border-radius: 5px;
+        background: #333;
+        border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #990adc;
+        background: #8257e5;
       }
     </style>
   <script type="importmap">

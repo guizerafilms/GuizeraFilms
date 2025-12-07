@@ -4,61 +4,34 @@ import { ServiceItem } from '../types';
 
 const Services: React.FC = () => {
   const services: ServiceItem[] = [
-    {
-      title: 'Vídeos Institucionais',
-      description: 'Fortaleça a identidade da sua marca com vídeos corporativos que transmitem profissionalismo e confiança.',
-      icon: <Briefcase size={32} />,
-    },
-    {
-      title: 'Marketing Político',
-      description: 'Campanhas eleitorais e gestão de imagem pública com narrativa estratégica e impacto emocional.',
-      icon: <Users size={32} />,
-    },
-    {
-      title: 'Cobertura de Eventos',
-      description: 'Aftermovies e registros dinâmicos de eventos sociais, corporativos e shows.',
-      icon: <Video size={32} />,
-    },
-    {
-      title: 'Conteúdo para Redes',
-      description: 'Reels, TikToks e vídeos verticais otimizados para alta retenção e viralização.',
-      icon: <Share2 size={32} />,
-    },
-    {
-      title: 'Edição Profissional',
-      description: 'Pós-produção de alto nível com color grading, motion graphics e sound design.',
-      icon: <MonitorPlay size={32} />,
-    },
-    {
-      title: 'Publicidade & TV',
-      description: 'Comerciais para televisão e internet com qualidade cinematográfica broadcast.',
-      icon: <Mic2 size={32} />,
-    },
+    { title: 'Institucional', description: 'Vídeos corporativos que fortalecem autoridade.', icon: <Briefcase size={24} /> },
+    { title: 'Marketing Político', description: 'Campanhas estratégicas e gestão de imagem.', icon: <Users size={24} /> },
+    { title: 'Eventos', description: 'Cobertura dinâmica de shows e eventos sociais.', icon: <Video size={24} /> },
+    { title: 'Conteúdo Digital', description: 'Reels e vídeos verticais de alto impacto.', icon: <Share2 size={24} /> },
+    { title: 'Pós-Produção', description: 'Edição, color grading e sound design.', icon: <MonitorPlay size={24} /> },
+    { title: 'Publicidade', description: 'Comerciais com estética broadcast.', icon: <Mic2 size={24} /> },
   ];
 
   return (
-    <section id="servicos" className="py-24 bg-bgDark relative">
+    <section className="py-24 bg-black">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6">
-            Nossos <span className="text-primary">Serviços</span>
-          </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-deepBlue mx-auto rounded-full"></div>
-        </div>
+        <h2 className="font-heading font-light text-3xl md:text-4xl text-white text-center mb-16 uppercase tracking-widest">
+            Soluções <span className="font-bold text-neon">360º</span>
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
           {services.map((service, index) => (
             <div 
               key={index}
-              className="group p-8 bg-[#1A0B2E] border border-white/5 hover:border-primary/50 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/10"
+              className="group p-10 bg-darkGray border border-white/5 hover:bg-white hover:text-black transition-all duration-500"
             >
-              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 mb-6">
+              <div className="text-neon group-hover:text-black transition-colors mb-6">
                 {service.icon}
               </div>
-              <h3 className="text-2xl font-heading font-bold text-white mb-4 group-hover:text-primary transition-colors">
+              <h3 className="text-lg font-heading font-bold uppercase tracking-widest text-white mb-3 group-hover:text-black">
                 {service.title}
               </h3>
-              <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">
+              <p className="text-gray-500 text-xs leading-relaxed group-hover:text-black/70 font-sans uppercase tracking-wide">
                 {service.description}
               </p>
             </div>

@@ -1,73 +1,50 @@
 import React from 'react';
 import { Camera, Zap, Award, Film } from 'lucide-react';
 
-const Feature: React.FC<{ icon: React.ReactNode; title: string; desc: string }> = ({ icon, title, desc }) => (
-  <div className="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors duration-300">
-    <div className="w-12 h-12 bg-gradient-to-br from-primary to-deepBlue rounded-lg flex items-center justify-center mb-4 text-white">
-      {icon}
-    </div>
-    <h3 className="text-xl font-heading font-bold mb-2 text-white">{title}</h3>
-    <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>
-  </div>
-);
-
 const About: React.FC = () => {
   return (
-    <section id="sobre" className="py-24 relative bg-bgDark">
+    <section id="sobre" className="py-24 bg-black relative overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
-          <div className="relative">
-            {/* Abstract visual representation of "Gui Azevedo" / Filmmaker */}
-            <div className="relative z-10 rounded-2xl overflow-hidden aspect-[4/5] shadow-2xl border border-white/10 group">
-              <div className="absolute inset-0 bg-gradient-to-t from-bgDark via-transparent to-transparent opacity-80 z-10"></div>
-              <img 
-                src="https://picsum.photos/800/1000?grayscale" 
-                alt="Gui Azevedo Filmmaker" 
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 transform group-hover:scale-105"
-              />
-              <div className="absolute bottom-0 left-0 p-8 z-20">
-                <h3 className="text-3xl font-heading font-bold text-white mb-1">Gui Azevedo</h3>
-                <p className="text-primary font-medium tracking-wide">Fundador & Diretor Criativo</p>
-              </div>
+          <div className="order-2 lg:order-1 relative">
+             <div className="absolute -top-10 -left-10 w-20 h-20 border-t border-l border-neon/50"></div>
+             <div className="relative z-10 aspect-[4/5] bg-darkGray overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+                <img 
+                  src="https://picsum.photos/800/1000?grayscale" 
+                  alt="Gui Azevedo" 
+                  className="w-full h-full object-cover opacity-80 hover:opacity-100 hover:scale-105 transition-all duration-700"
+                />
+             </div>
+             <div className="absolute -bottom-6 -right-6 bg-black border border-white/10 p-6 z-20">
+                <p className="font-heading text-white text-lg font-bold uppercase tracking-widest">Gui Azevedo</p>
+                <p className="text-neon text-[10px] uppercase tracking-widest mt-1">Filmmaker & Diretor</p>
             </div>
-            {/* Decorative element */}
-            <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-primary rounded-full blur-[80px] opacity-40"></div>
           </div>
 
-          <div>
-            <h4 className="text-primary font-bold tracking-widest uppercase mb-2">Sobre Nós</h4>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6 leading-tight">
-              Mais do que vídeos, criamos <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">legados visuais.</span>
+          <div className="order-1 lg:order-2">
+            <h2 className="font-heading font-light text-4xl md:text-5xl text-white mb-8 uppercase tracking-widest">
+              Nossa <span className="font-bold text-neon">Visão</span>
             </h2>
-            <p className="text-gray-300 text-lg mb-6 leading-relaxed">
-              A <strong>Guizera Films</strong> nasceu da paixão de contar histórias através de lentes cinematográficas. Fundada por Gui Azevedo, unimos estratégia digital com uma estética refinada e autêntica.
-            </p>
-            <p className="text-gray-300 text-lg mb-10 leading-relaxed">
-              Nosso foco não é apenas entregar um vídeo, mas provocar emoção e gerar autoridade. Seja no ambiente político, corporativo ou em grandes eventos, nossa câmera captura a essência do momento com agilidade e precisão.
-            </p>
+            
+            <div className="space-y-6 text-gray-400 font-sans font-light text-sm md:text-base leading-relaxed tracking-wide text-justify">
+                <p>
+                A <strong className="text-white">Guizera Films</strong> opera na intersecção entre a arte cinematográfica e a estratégia digital. Não fazemos apenas vídeos; construímos ativos visuais que elevam a percepção de valor da sua marca.
+                </p>
+                <p>
+                Com equipamentos de ponta e um olhar treinado para a narrativa, entregamos resultados que superam o convencional. Seja para o mercado corporativo, político ou eventos sociais, nossa assinatura é a sofisticação.
+                </p>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Feature 
-                icon={<Camera size={24} />} 
-                title="Cinematografia" 
-                desc="Equipamentos de ponta e olhar artístico apurado." 
-              />
-              <Feature 
-                icon={<Zap size={24} />} 
-                title="Agilidade" 
-                desc="Entregas rápidas sem comprometer a qualidade final." 
-              />
-              <Feature 
-                icon={<Award size={24} />} 
-                title="Estratégia" 
-                desc="Conteúdo pensado para engajar e converter." 
-              />
-              <Feature 
-                icon={<Film size={24} />} 
-                title="Pós-Produção" 
-                desc="Edição dinâmica, color grading e sound design imersivo." 
-              />
+            <div className="grid grid-cols-2 gap-8 mt-12">
+                <div className="border-l border-white/20 pl-6">
+                    <h3 className="text-white font-heading font-bold text-2xl">4K</h3>
+                    <p className="text-gray-500 text-[10px] uppercase tracking-widest mt-1">Qualidade Cinema</p>
+                </div>
+                <div className="border-l border-white/20 pl-6">
+                    <h3 className="text-white font-heading font-bold text-2xl">+500</h3>
+                    <p className="text-gray-500 text-[10px] uppercase tracking-widest mt-1">Projetos Entregues</p>
+                </div>
             </div>
           </div>
 

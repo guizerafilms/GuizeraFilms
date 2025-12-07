@@ -7,50 +7,41 @@ interface PortfolioDriveProps {
   isAdmin: boolean;
 }
 
-const DEFAULT_VIDEOS: DriveVideo[] = [
-  { 
-    id: '1', 
-    driveId: '1kcRj9QdAO1EMY7H5wno4HUexhgut2aGr', 
-    title: 'Casamento: Kathelen & Gean', 
-    category: 'Casamento' 
-  },
-  { 
-    id: '2', 
-    driveId: '1BXHON8h2UQjykxBLsmYQfC6MhZdoVVuS', 
-    title: 'Casamento: Cerimônia Completa', 
-    category: 'Casamento' 
-  },
-  { 
-    id: '3', 
-    driveId: '1AagfPT9MDPoMxwWpK0Dxez18pT44OHtA', 
-    title: 'Casamento: Melhores Momentos', 
-    category: 'Casamento' 
-  },
+// Novos Links fornecidos
+const PRESET_VIDEOS = [
+  { id: '1', driveId: '1_j3K-5B8hQNyBpn6dXZYhgMuBLkGuOKJ', title: 'Casamento Cinematic', category: 'Casamento' },
+  { id: '2', driveId: '1BXHON8h2UQjykxBLsmYQfC6MhZdoVVuS', title: 'Filme Institucional', category: 'Institucional' },
+  { id: '3', driveId: '1kcRj9QdAO1EMY7H5wno4HUexhgut2aGr', title: 'Cobertura de Evento', category: 'Evento' },
+  { id: '4', driveId: '1AagfPT9MDPoMxwWpK0Dxez18pT44OHtA', title: 'Aniversário Premium', category: 'Social' },
+  { id: '5', driveId: '1zb-eGCvqgnEIIVaGtCCIpXYjiwqgiWlZ', title: 'Comercial TV', category: 'Publicidade' },
 ];
 
-const LOCAL_STORAGE_KEY = 'guizera_drive_videos_v20';
+const LOCAL_STORAGE_KEY = 'guizera_drive_videos_v2025';
 
 const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
-  const [videos, setVideos] = useState<DriveVideo[]>(DEFAULT_VIDEOS);
+  const [videos, setVideos] = useState<DriveVideo[]>(PRESET_VIDEOS);
   const [inputUrl, setInputUrl] = useState('');
-  const [category, setCategory] = useState('Casamento');
-  const [error, setError] = useState('');
+  const [category, setCategory] = useState('Geral');
   
   // Player state
   const [selectedVideo, setSelectedVideo] = useState<DriveVideo | null>(null);
-  const [isVideoLoading, setIsVideoLoading] = useState(false);
   
+  // Initial Load Logic: Merge defaults if local storage is empty or use presets
   useEffect(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (saved) {
       try {
-        setVideos(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        if (parsed.length > 0) {
+            setVideos(parsed);
+        } else {
+            setVideos(PRESET_VIDEOS);    
+        }
       } catch (e) {
-        console.error("Failed to parse saved videos", e);
-        setVideos(DEFAULT_VIDEOS);
+        setVideos(PRESET_VIDEOS);
       }
     } else {
-        setVideos(DEFAULT_VIDEOS);
+        setVideos(PRESET_VIDEOS);
     }
   }, []);
 
@@ -59,205 +50,133 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
   }, [videos]);
 
   const handleAddVideo = () => {
-    setError('');
     const driveId = extractDriveId(inputUrl);
-    
-    if (!driveId) {
-      setError('Link inválido. Certifique-se de que é um link de visualização do Google Drive.');
-      return;
+    if (driveId) {
+        const newVideo: DriveVideo = {
+            id: Date.now().toString(),
+            driveId,
+            title: `Projeto ${videos.length + 1}`,
+            category: category
+        };
+        setVideos([newVideo, ...videos]);
+        setInputUrl('');
     }
-
-    const newVideo: DriveVideo = {
-      id: Date.now().toString(),
-      driveId,
-      title: `Projeto ${videos.length + 1}`,
-      category: category || 'Geral'
-    };
-
-    setVideos([newVideo, ...videos]);
-    setInputUrl('');
   };
 
   const handleDeleteVideo = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (window.confirm('Tem certeza que deseja remover este vídeo?')) {
+    if (window.confirm('Remover vídeo?')) {
       setVideos(videos.filter(v => v.id !== id));
     }
   };
 
-  const openModal = (video: DriveVideo) => {
-    setIsVideoLoading(true);
-    setSelectedVideo(video);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeModal = () => {
-    setSelectedVideo(null);
-    setIsVideoLoading(false);
-    document.body.style.overflow = 'unset';
-  };
-
   return (
-    <section id="portfolio" className="py-24 bg-[#0F031B]">
+    <section id="portfolio" className="py-24 bg-black">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-heading font-bold text-white mb-4">Produções em <span className="text-primary">Destaque</span></h2>
-          <p className="text-gray-400 max-w-xl mx-auto">
-            Confira nossa seleção de projetos recentes com qualidade cinematográfica.
-          </p>
+        
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-8">
+            <h2 className="font-heading font-light text-3xl md:text-4xl text-white uppercase tracking-widest">
+                Portfólio <span className="font-bold text-neon">Select</span>
+            </h2>
+            <p className="text-gray-500 font-sans text-xs uppercase tracking-widest mt-4 md:mt-0">
+                Produções Recentes
+            </p>
         </div>
 
-        {/* Input Area - Only Visible to Admin */}
+        {/* Admin Input */}
         {isAdmin && (
-          <div className="max-w-3xl mx-auto bg-primary/10 border border-primary/30 rounded-xl p-6 mb-16 backdrop-blur-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-primary text-xs font-bold px-3 py-1 text-white rounded-bl-lg">ADMIN</div>
-            <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-              <Plus className="text-primary" /> Adicionar Vídeo do Drive
-            </h3>
-            <div className="flex flex-col md:flex-row gap-4">
+          <div className="mb-12 bg-darkGray p-6 border border-white/10">
+            <h3 className="text-neon font-bold text-xs uppercase tracking-widest mb-4">Adicionar Projeto</h3>
+            <div className="flex gap-4">
               <input 
                 type="text" 
-                placeholder="Cole o link do Google Drive aqui..." 
-                className="flex-1 bg-black/40 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                placeholder="Google Drive Link" 
+                className="bg-black border border-white/20 text-white p-3 flex-1 text-sm outline-none focus:border-neon"
                 value={inputUrl}
                 onChange={(e) => setInputUrl(e.target.value)}
               />
               <input 
-                type="text"
-                placeholder="Categoria"
-                className="w-full md:w-48 bg-black/40 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                type="text" 
+                placeholder="Categoria" 
+                className="bg-black border border-white/20 text-white p-3 w-40 text-sm outline-none focus:border-neon"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               />
-              <button 
-                onClick={handleAddVideo}
-                className="bg-primary hover:bg-primaryDark text-white font-bold px-6 py-3 rounded-lg transition-colors whitespace-nowrap"
-              >
-                Adicionar
+              <button onClick={handleAddVideo} className="bg-white text-black px-6 font-bold uppercase text-xs hover:bg-neon hover:text-white transition-colors">
+                <Plus size={18} />
               </button>
             </div>
-            {error && <p className="text-red-400 text-sm mt-2">{error}</p>}
           </div>
         )}
 
-        {/* Video Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {videos.map((video) => (
             <div 
                 key={video.id} 
-                className="group bg-bgDark border border-white/5 rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/20 relative cursor-pointer flex flex-col"
-                onClick={() => openModal(video)}
+                className="group relative bg-darkGray cursor-pointer border border-white/5 hover:border-neon/50 transition-all duration-300"
+                onClick={() => setSelectedVideo(video)}
             >
-              {isAdmin && (
-                <button 
-                  onClick={(e) => handleDeleteVideo(video.id, e)}
-                  className="absolute top-2 right-2 z-20 bg-red-500/80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-                >
-                  <Trash2 size={16} className="text-white" />
-                </button>
-              )}
-
-              <div className="relative aspect-video bg-black w-full overflow-hidden">
-                {/* Thumbnail Layer - Using iframe as thumb to ensure size match, but sanitized */}
-                <div className="absolute inset-0 pointer-events-none opacity-80 group-hover:opacity-60 transition-opacity">
-                    <iframe
-                    src={getDriveEmbedUrl(video.driveId)}
-                    className="w-full h-full object-cover"
-                    title={video.title}
-                    tabIndex={-1}
-                    loading="lazy"
-                    sandbox="allow-scripts allow-same-origin"
-                    ></iframe>
-                </div>
+                {isAdmin && (
+                    <button onClick={(e) => handleDeleteVideo(video.id, e)} className="absolute top-2 right-2 z-20 bg-red-600 p-1 text-white opacity-0 group-hover:opacity-100">
+                        <Trash2 size={14} />
+                    </button>
+                )}
                 
-                {/* Click Guard (Invisible layer to capture click) */}
-                <div className="absolute inset-0 z-20 cursor-pointer"></div>
-
-                {/* Play Button Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-                    <div className="w-16 h-16 bg-primary/90 rounded-full flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform shadow-lg shadow-black/50">
-                        <Play className="fill-white text-white ml-1 w-6 h-6" />
+                {/* Thumbnail Container */}
+                <div className="aspect-video w-full overflow-hidden relative">
+                    <iframe
+                        src={getDriveEmbedUrl(video.driveId)}
+                        className="w-full h-full object-cover pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0"
+                        title={video.title}
+                        loading="lazy"
+                    ></iframe>
+                    
+                    {/* Play Icon Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center z-10">
+                        <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 group-hover:border-neon group-hover:text-neon transition-all duration-300">
+                            <Play size={20} fill="currentColor" className="text-white group-hover:text-neon transition-colors ml-1" />
+                        </div>
                     </div>
                 </div>
 
-                <div className="absolute bottom-4 left-4 z-10 bg-black/70 px-3 py-1 rounded text-xs text-white backdrop-blur-sm font-bold tracking-wide pointer-events-none">
-                    ASSISTIR
+                {/* Info */}
+                <div className="p-6">
+                    <span className="text-neon text-[10px] font-bold uppercase tracking-widest mb-2 block">{video.category}</span>
+                    <h3 className="text-white font-heading font-light text-lg uppercase tracking-wide">{video.title}</h3>
                 </div>
-              </div>
-              
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                    <span className="text-xs font-bold text-primary uppercase tracking-wider mb-2 block">{video.category}</span>
-                    <h3 className="text-white font-heading font-bold text-lg mb-2 leading-tight">{video.title}</h3>
-                </div>
-                <div className="w-full h-1 bg-white/5 rounded-full mt-4 group-hover:bg-primary/50 transition-colors"></div>
-              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox */}
       {selectedVideo && (
-        <div 
-            className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 animate-fade-in backdrop-blur-sm"
-            onClick={closeModal}
-        >
-            <div 
-                className="relative w-full max-w-6xl flex flex-col items-center justify-center"
-                onClick={(e) => e.stopPropagation()}
-            >
-                {/* Top Actions Bar */}
-                <div className="w-full flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-4">
-                        <h3 className="text-white font-bold text-lg hidden md:block">{selectedVideo.title}</h3>
-                        <a 
-                        href={getDriveEmbedUrl(selectedVideo.driveId).replace('/preview', '/view')} 
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-white/70 hover:text-primary text-xs md:text-sm font-medium transition-colors border border-white/10 px-3 py-1 rounded-full bg-white/5"
-                        >
-                            <ExternalLink size={14} />
-                            Abrir no Drive
-                        </a>
-                    </div>
-
-                    <button 
-                        onClick={closeModal}
-                        className="bg-white/10 hover:bg-white hover:text-black text-white p-2 rounded-full transition-all duration-300 border border-white/20"
+        <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md" onClick={() => setSelectedVideo(null)}>
+            <div className="w-full max-w-5xl aspect-video bg-black border border-white/10 relative shadow-2xl shadow-neon/10">
+                <button className="absolute -top-10 right-0 text-white hover:text-neon transition-colors" onClick={() => setSelectedVideo(null)}>
+                    <X size={24} />
+                </button>
+                <iframe
+                    src={getDriveEmbedUrl(selectedVideo.driveId)}
+                    className="w-full h-full"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
+                    title={selectedVideo.title}
+                ></iframe>
+                <div className="absolute -bottom-10 left-0">
+                    <h3 className="text-white font-heading font-bold uppercase tracking-widest text-sm">{selectedVideo.title}</h3>
+                </div>
+                <div className="absolute -bottom-10 right-0">
+                     <a 
+                      href={getDriveEmbedUrl(selectedVideo.driveId).replace('/preview', '/view')} 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors"
                     >
-                        <X size={24} />
-                    </button>
-                </div>
-
-                {/* Video Container */}
-                <div className="w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-white/10 relative flex items-center justify-center">
-                    
-                    {isVideoLoading && (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center z-0 bg-black">
-                            <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-                            <p className="text-gray-400 text-sm">Carregando player do Google...</p>
-                        </div>
-                    )}
-                    
-                    <iframe
-                        key={selectedVideo.id} 
-                        src={getDriveEmbedUrl(selectedVideo.driveId)} 
-                        className="w-full h-full relative z-10 bg-black"
-                        onLoad={() => setIsVideoLoading(false)}
-                        allow="autoplay; fullscreen; picture-in-picture; encrypted-media; accelerometer; gyroscope"
-                        allowFullScreen
-                        width="100%"
-                        height="100%"
-                        loading="eager"
-                        title={selectedVideo.title}
-                    ></iframe>
-                </div>
-                
-                <div className="mt-4 text-center w-full">
-                    <p className="text-gray-500 text-xs">
-                        * Se o player não iniciar, use o botão "Abrir no Drive" no canto superior.
-                    </p>
+                        Abrir no Drive <ExternalLink size={12} />
+                    </a>
                 </div>
             </div>
         </div>
