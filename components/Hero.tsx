@@ -16,12 +16,19 @@ const Hero: React.FC = () => {
     <section 
       id="hero"
       className="relative w-full overflow-hidden bg-black mt-20"
-      style={{ height: '70vh', minHeight: '600px' }}
+      style={{ height: '600px' }}
     >
       
       {/* BACKGROUND VIDEO */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] md:w-[120%] md:h-[120%]">
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* 
+           Wrapper centralizado para simular object-fit: cover em iframes.
+           Definimos dimensões grandes o suficiente para garantir o preenchimento sem barras pretas.
+        */}
+        <div 
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            style={{ width: '300%', height: '300%' }} // Garante cobertura em qualquer aspect ratio
+        >
           <iframe 
             className="w-full h-full object-cover opacity-80"
             src="https://www.youtube.com/embed/m3e5y3aTk3o?autoplay=1&mute=1&controls=0&loop=1&playlist=m3e5y3aTk3o&rel=0&showinfo=0&iv_load_policy=3&modestbranding=1&playsinline=1&enablejsapi=1&origin=https://guizerafilms.com" 
@@ -29,6 +36,7 @@ const Hero: React.FC = () => {
             frameBorder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
             allowFullScreen
+            style={{ pointerEvents: 'none' }}
           ></iframe>
         </div>
       </div>
