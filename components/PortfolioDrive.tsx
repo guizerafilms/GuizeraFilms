@@ -28,7 +28,7 @@ const DEFAULT_VIDEOS: DriveVideo[] = [
   },
 ];
 
-const LOCAL_STORAGE_KEY = 'guizera_drive_videos_v18';
+const LOCAL_STORAGE_KEY = 'guizera_drive_videos_v20';
 
 const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
   const [videos, setVideos] = useState<DriveVideo[]>(DEFAULT_VIDEOS);
@@ -158,7 +158,7 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
               )}
 
               <div className="relative aspect-video bg-black w-full overflow-hidden">
-                {/* Thumbnail Layer - Using iframe as thumb since Drive doesn't give images easily */}
+                {/* Thumbnail Layer - Using iframe as thumb to ensure size match, but sanitized */}
                 <div className="absolute inset-0 pointer-events-none opacity-80 group-hover:opacity-60 transition-opacity">
                     <iframe
                     src={getDriveEmbedUrl(video.driveId)}
@@ -246,9 +246,9 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
                         className="w-full h-full relative z-10 bg-black"
                         onLoad={() => setIsVideoLoading(false)}
                         allow="autoplay; fullscreen; picture-in-picture; encrypted-media; accelerometer; gyroscope"
-                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
-                        referrerPolicy="no-referrer"
                         allowFullScreen
+                        width="100%"
+                        height="100%"
                         loading="eager"
                         title={selectedVideo.title}
                     ></iframe>
@@ -256,7 +256,7 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
                 
                 <div className="mt-4 text-center w-full">
                     <p className="text-gray-500 text-xs">
-                        * Se o player apresentar lentidão, use o botão "Abrir no Drive".
+                        * Se o player não iniciar, use o botão "Abrir no Drive" no canto superior.
                     </p>
                 </div>
             </div>

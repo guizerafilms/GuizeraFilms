@@ -8,7 +8,12 @@ interface PortfolioInstaProps {
 }
 
 const DEFAULT_REELS: InstaVideo[] = [
-  { id: '1', embedUrl: '', caption: 'Aftermovie Festival de Verão', client: 'Eventos BR' },
+  { 
+    id: '1', 
+    embedUrl: getInstaEmbedUrl('DGG0j-Kx6PM'), 
+    caption: 'Produção em Destaque', 
+    client: 'Guizera Films' 
+  },
   { id: '2', embedUrl: '', caption: 'Fashion Film Collection', client: 'Marca X' },
   { id: '3', embedUrl: '', caption: 'Campanha Digital', client: 'Empresa Y' },
 ];
@@ -20,19 +25,22 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin }) => {
 
   // Load from LocalStorage on mount
   useEffect(() => {
-    const saved = localStorage.getItem('guizera_insta_reels');
+    const saved = localStorage.getItem('guizera_insta_reels_v3');
     if (saved) {
       try {
         setReels(JSON.parse(saved));
       } catch (e) {
         console.error("Failed to parse saved reels", e);
+        setReels(DEFAULT_REELS);
       }
+    } else {
+      setReels(DEFAULT_REELS);
     }
   }, []);
 
   // Save to LocalStorage
   useEffect(() => {
-    localStorage.setItem('guizera_insta_reels', JSON.stringify(reels));
+    localStorage.setItem('guizera_insta_reels_v3', JSON.stringify(reels));
   }, [reels]);
 
   const handleAddReel = () => {
@@ -139,6 +147,7 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin }) => {
                                 frameBorder="0" 
                                 scrolling="no" 
                                 allowTransparency={true}
+                                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                             ></iframe>
                          ) : (
                              // Placeholder for empty dummy data
