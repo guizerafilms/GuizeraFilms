@@ -65,7 +65,7 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
             </p>
         </div>
 
-        {/* Vertical Grid - Atualizado para 5 colunas no desktop se possível, ou grid auto-fit */}
+        {/* Vertical Grid - Atualizado para Mobile */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {verticalVideos.map((video, index) => {
                 const driveId = extractDriveId(video.url);
@@ -74,7 +74,9 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                 return (
                     <div 
                         key={index} 
-                        className="aspect-[9/16] bg-black border border-white/5 group relative overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-colors duration-500 cursor-pointer"
+                        // MOBILE FIX: Altura fixa (h-72 / aprox 288px) para garantir alinhamento perfeito na grade de 2 colunas.
+                        // DESKTOP: aspect-[9/16] para manter proporção correta.
+                        className="relative w-full h-72 md:h-auto md:aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-all duration-500 cursor-pointer rounded-sm"
                         onClick={() => handleVideoClick(video, index)}
                     >
                         
@@ -82,7 +84,9 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                         {embedUrl ? (
                             <iframe 
                                 src={embedUrl}
-                                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-300 grayscale group-hover:grayscale-0 pointer-events-none"
+                                // MOBILE: Grayscale removido (grayscale-0) e opacidade ajustada para visibilidade.
+                                // DESKTOP: Grayscale ativado por padrão, removido no hover.
+                                className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-all duration-500 grayscale-0 md:grayscale opacity-70 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0"
                                 title={video.title}
                                 loading="lazy"
                             ></iframe>
@@ -90,29 +94,29 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                             <div className="absolute inset-0 bg-gray-900"></div>
                         )}
 
-                        {/* Overlay Gradient (some ao passar o mouse para ver o video melhor) */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none group-hover:opacity-0 transition-opacity duration-300"></div>
+                        {/* Overlay Gradient - SEMPRE VISÍVEL NO MOBILE para garantir leitura do texto */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"></div>
                         
-                        {/* Info Content */}
-                        <div className="absolute bottom-4 left-0 w-full px-4 text-center z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                        {/* Info Content - SEMPRE VISÍVEL NO MOBILE */}
+                        <div className="absolute bottom-4 left-0 w-full px-2 text-center z-20 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                              <div className="flex justify-center mb-2">
-                                <Smartphone className="text-neon w-6 h-6" />
+                                <Smartphone className="text-neon w-4 h-4 md:w-6 md:h-6" />
                              </div>
-                             <p className="text-neon text-[8px] font-bold uppercase tracking-widest mb-1">{video.category}</p>
-                             <h3 className="text-white text-[10px] font-heading uppercase tracking-wide leading-tight">{video.title}</h3>
+                             <p className="text-neon text-[8px] font-bold uppercase tracking-widest mb-1 truncate">{video.category}</p>
+                             <h3 className="text-white text-[9px] md:text-[10px] font-heading uppercase tracking-wide leading-tight line-clamp-2">{video.title}</h3>
                         </div>
 
-                        {/* External Link Button (appears on hover) */}
+                        {/* Play Button - PADRONIZADO (Outline) e SEMPRE VISÍVEL NO MOBILE */}
                         <div 
-                            className="absolute inset-0 z-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]"
+                            className="absolute inset-0 z-30 flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
                         >
-                            <div className="bg-neon text-white p-3 rounded-full transform scale-50 group-hover:scale-100 transition-transform duration-300 shadow-lg shadow-neon/50">
-                                <Play size={20} fill="currentColor" />
+                            <div className="border border-white/40 bg-black/20 backdrop-blur-[2px] text-white p-3 rounded-full transform scale-75 md:scale-50 md:group-hover:scale-100 transition-all duration-300 shadow-sm md:shadow-lg hover:bg-neon hover:border-neon hover:text-white">
+                                <Play size={20} fill="currentColor" className="ml-1" />
                             </div>
                         </div>
 
-                        {/* Scanline Effect */}
-                        <div className="absolute inset-0 bg-white/5 h-[1px] w-full animate-float opacity-0 group-hover:opacity-20 pointer-events-none"></div>
+                        {/* Scanline Effect - Apenas Desktop */}
+                        <div className="hidden md:block absolute inset-0 bg-white/5 h-[1px] w-full animate-float opacity-0 group-hover:opacity-20 pointer-events-none"></div>
                     </div>
                 );
             })}
