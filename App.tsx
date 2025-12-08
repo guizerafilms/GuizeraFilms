@@ -22,6 +22,8 @@ function App() {
     }
   }, []);
 
+  const isVertical = selectedVideo?.id.startsWith('insta');
+
   return (
     <div className="bg-black min-h-screen text-white font-sans selection:bg-neon selection:text-white">
       <Header />
@@ -48,7 +50,13 @@ function App() {
             onClick={() => setSelectedVideo(null)}
         >
             <div 
-                className={`w-full max-w-5xl bg-black border border-white/10 relative shadow-2xl shadow-neon/10 ${selectedVideo.id.startsWith('insta') ? 'aspect-[9/16] max-w-[50vh]' : 'aspect-video'}`}
+                className={`
+                    bg-black border border-white/10 relative shadow-2xl shadow-neon/10 
+                    ${isVertical 
+                        ? 'w-[90vw] max-h-[90vh] aspect-[9/16] md:w-auto md:h-[85vh]' 
+                        : 'w-[95vw] max-w-5xl aspect-video'
+                    }
+                `}
                 onClick={(e) => e.stopPropagation()}
             >
                 <button className="absolute -top-10 right-0 text-white hover:text-neon transition-colors" onClick={() => setSelectedVideo(null)}>
@@ -64,7 +72,7 @@ function App() {
                 ></iframe>
 
                 <div className="absolute -bottom-10 left-0">
-                    <h3 className="text-white font-heading font-bold uppercase tracking-widest text-sm">{selectedVideo.title}</h3>
+                    <h3 className="text-white font-heading font-bold uppercase tracking-widest text-sm truncate max-w-[200px] md:max-w-none">{selectedVideo.title}</h3>
                 </div>
                 <div className="absolute -bottom-10 right-0">
                      <a 

@@ -65,8 +65,8 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
             </p>
         </div>
 
-        {/* Vertical Grid - Atualizado para Mobile */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {/* Vertical Grid - Configuração Rígida para Mobile */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
             {verticalVideos.map((video, index) => {
                 const driveId = extractDriveId(video.url);
                 const embedUrl = driveId ? getDriveEmbedUrl(driveId) : '';
@@ -74,39 +74,40 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                 return (
                     <div 
                         key={index} 
-                        // MOBILE FIX: Altura fixa (h-72 / aprox 288px) para garantir alinhamento perfeito na grade de 2 colunas.
-                        // DESKTOP: aspect-[9/16] para manter proporção correta.
-                        className="relative w-full h-72 md:h-auto md:aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-all duration-500 cursor-pointer rounded-sm"
+                        // Altura fixa (h-[280px]) no mobile para garantir alinhamento da grade
+                        className="relative w-full h-[280px] md:h-auto md:aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-all duration-500 cursor-pointer rounded-sm"
                         onClick={() => handleVideoClick(video, index)}
                     >
                         
-                        {/* Iframe Background */}
+                        {/* Iframe Background - Full Size */}
                         {embedUrl ? (
-                            <iframe 
-                                src={embedUrl}
-                                // MOBILE: Grayscale removido (grayscale-0) e opacidade ajustada para visibilidade.
-                                // DESKTOP: Grayscale ativado por padrão, removido no hover.
-                                className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-all duration-500 grayscale-0 md:grayscale opacity-70 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0"
-                                title={video.title}
-                                loading="lazy"
-                            ></iframe>
+                            <div className="absolute inset-0 w-full h-full">
+                                <iframe 
+                                    src={embedUrl}
+                                    className="w-full h-full object-cover pointer-events-none transition-all duration-500 grayscale-0 md:grayscale opacity-70 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0"
+                                    title={video.title}
+                                    loading="lazy"
+                                    scrolling="no"
+                                    style={{ transform: 'scale(1.02)' }} // Leve zoom para cobrir bordas
+                                ></iframe>
+                            </div>
                         ) : (
                             <div className="absolute inset-0 bg-gray-900"></div>
                         )}
 
-                        {/* Overlay Gradient - SEMPRE VISÍVEL NO MOBILE para garantir leitura do texto */}
+                        {/* Overlay Gradient - Sempre visível no mobile */}
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"></div>
                         
-                        {/* Info Content - SEMPRE VISÍVEL NO MOBILE */}
-                        <div className="absolute bottom-4 left-0 w-full px-2 text-center z-20 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-                             <div className="flex justify-center mb-2">
+                        {/* Info Content - Sempre visível no mobile */}
+                        <div className="absolute bottom-3 left-0 w-full px-2 text-center z-20 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                             <div className="flex justify-center mb-1">
                                 <Smartphone className="text-neon w-4 h-4 md:w-6 md:h-6" />
                              </div>
-                             <p className="text-neon text-[8px] font-bold uppercase tracking-widest mb-1 truncate">{video.category}</p>
-                             <h3 className="text-white text-[9px] md:text-[10px] font-heading uppercase tracking-wide leading-tight line-clamp-2">{video.title}</h3>
+                             <p className="text-neon text-[8px] font-bold uppercase tracking-widest mb-1 truncate px-1">{video.category}</p>
+                             <h3 className="text-white text-[9px] md:text-[10px] font-heading uppercase tracking-wide leading-tight line-clamp-2 px-1">{video.title}</h3>
                         </div>
 
-                        {/* Play Button - PADRONIZADO (Outline) e SEMPRE VISÍVEL NO MOBILE */}
+                        {/* Play Button - Sempre visível no mobile */}
                         <div 
                             className="absolute inset-0 z-30 flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
                         >
@@ -115,7 +116,7 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                             </div>
                         </div>
 
-                        {/* Scanline Effect - Apenas Desktop */}
+                        {/* Scanline Effect - Desktop Only */}
                         <div className="hidden md:block absolute inset-0 bg-white/5 h-[1px] w-full animate-float opacity-0 group-hover:opacity-20 pointer-events-none"></div>
                     </div>
                 );
