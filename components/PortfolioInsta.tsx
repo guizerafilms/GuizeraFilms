@@ -1,13 +1,40 @@
-import React, { useState } from 'react';
-import { Smartphone, Plus } from 'lucide-react';
+import React from 'react';
+import { Smartphone, Play } from 'lucide-react';
+import { getDriveEmbedUrl, extractDriveId } from '../utils/urlHelpers';
 
 interface PortfolioInstaProps {
   isAdmin: boolean;
 }
 
 const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin }) => {
-  // Placeholders para layout 9:16
-  const [items, setItems] = useState([1, 2, 3, 4]);
+  
+  const verticalVideos = [
+    {
+        title: "Aniversário: Rio do Pires (64 Anos)",
+        category: "AFTERMOVIE",
+        url: "https://drive.google.com/file/d/1FRLjHXbuwQtKIwkckwRY50jA3TVUUCvU/view?usp=sharing"
+    },
+    {
+        title: "Comício na Varzinha",
+        category: "CAMPANHA POLÍTICA",
+        url: "https://drive.google.com/file/d/1Djty4MWzciUfy9vdQvGov9m9p68Fdz9n/view?usp=sharing"
+    },
+    {
+        title: "Retrospectiva Guizera Films",
+        category: "INSTITUCIONAL",
+        url: "https://drive.google.com/file/d/1_O1Imx7CM5xLXzlo4EIYdf9Bxs7qgUum/view?usp=sharing"
+    },
+    {
+        title: "Joane: Growth Academia",
+        category: "FITNESS / ACADEMIA",
+        url: "https://drive.google.com/file/d/1wsQWgqiQZhEo-SSZt5X0eEQDC1idTekx/view?usp=sharing"
+    },
+    {
+        title: "Lançamento: Studio Gregório",
+        category: "PUBLICITÁRIO",
+        url: "https://drive.google.com/file/d/1YlE1_11mXDBktSUhOY2sU5pO1FEgjLYp/view?usp=sharing"
+    }
+  ];
 
   return (
     <section id="verticais" className="py-24 bg-darkGray border-t border-white/5">
@@ -22,34 +49,56 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin }) => {
             </p>
         </div>
 
-        {/* Vertical Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            {items.map((item, index) => (
-                <div key={index} className="aspect-[9/16] bg-black border border-white/5 group relative overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-colors duration-500">
-                    
-                    {/* Placeholder Content */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10"></div>
-                    
-                    <Smartphone className="text-white/10 w-12 h-12 mb-4 group-hover:text-neon group-hover:scale-110 transition-all duration-300 relative z-20" />
-                    
-                    <span className="text-white/30 text-[10px] uppercase tracking-widest font-bold relative z-20 group-hover:text-white transition-colors">
-                        Projeto {item}
-                    </span>
-                    
-                    <div className="absolute bottom-6 left-0 w-full text-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                         <span className="text-neon text-[9px] uppercase tracking-widest border border-neon px-3 py-1">Em Breve</span>
-                    </div>
+        {/* Vertical Grid - Atualizado para 5 colunas no desktop se possível, ou grid auto-fit */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {verticalVideos.map((video, index) => {
+                const driveId = extractDriveId(video.url);
+                const embedUrl = driveId ? getDriveEmbedUrl(driveId) : '';
 
-                    {/* Scanline Effect */}
-                    <div className="absolute inset-0 bg-white/5 h-[1px] w-full animate-float opacity-0 group-hover:opacity-20 pointer-events-none"></div>
-                </div>
-            ))}
-            
-            {isAdmin && (
-                <div className="aspect-[9/16] border-2 border-dashed border-white/10 flex items-center justify-center cursor-pointer hover:border-neon hover:text-neon text-white/30 transition-all">
-                    <Plus size={32} />
-                </div>
-            )}
+                return (
+                    <div key={index} className="aspect-[9/16] bg-black border border-white/5 group relative overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-colors duration-500">
+                        
+                        {/* Iframe Background */}
+                        {embedUrl ? (
+                            <iframe 
+                                src={embedUrl}
+                                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-300 grayscale group-hover:grayscale-0"
+                                title={video.title}
+                                loading="lazy"
+                            ></iframe>
+                        ) : (
+                            <div className="absolute inset-0 bg-gray-900"></div>
+                        )}
+
+                        {/* Overlay Gradient (some ao passar o mouse para ver o video melhor) */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none group-hover:opacity-0 transition-opacity duration-300"></div>
+                        
+                        {/* Info Content */}
+                        <div className="absolute bottom-4 left-0 w-full px-4 text-center z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                             <div className="flex justify-center mb-2">
+                                <Smartphone className="text-neon w-6 h-6" />
+                             </div>
+                             <p className="text-neon text-[8px] font-bold uppercase tracking-widest mb-1">{video.category}</p>
+                             <h3 className="text-white text-[10px] font-heading uppercase tracking-wide leading-tight">{video.title}</h3>
+                        </div>
+
+                        {/* External Link Button (appears on hover) */}
+                        <a 
+                            href={video.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="absolute inset-0 z-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]"
+                        >
+                            <div className="bg-neon text-white p-3 rounded-full transform scale-50 group-hover:scale-100 transition-transform duration-300">
+                                <Play size={20} fill="currentColor" />
+                            </div>
+                        </a>
+
+                        {/* Scanline Effect */}
+                        <div className="absolute inset-0 bg-white/5 h-[1px] w-full animate-float opacity-0 group-hover:opacity-20 pointer-events-none"></div>
+                    </div>
+                );
+            })}
         </div>
         
       </div>

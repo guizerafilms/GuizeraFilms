@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
                 GUIZERA<span className="text-neon">FILMS</span>
             </h4>
             <p className="text-gray-600 text-[10px] uppercase tracking-widest">
-                São Paulo, Brasil
+                Bahia, Brasil
             </p>
         </div>
 

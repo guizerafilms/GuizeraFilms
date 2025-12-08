@@ -1,32 +1,80 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Play, Trash2, X, ExternalLink, Loader2 } from 'lucide-react';
-import { extractDriveId, getDriveEmbedUrl } from '../utils/urlHelpers';
-import { DriveVideo } from '../types';
+import { Plus, Play, Trash2, X, ExternalLink } from 'lucide-react';
+import { 
+    extractDriveId, 
+    getDriveEmbedUrl, 
+    extractYoutubeId, 
+    getYoutubeEmbedUrl, 
+    getYoutubeThumbnailUrl 
+} from '../utils/urlHelpers';
+import { PortfolioVideo } from '../types';
 
 interface PortfolioDriveProps {
   isAdmin: boolean;
 }
 
-// Novos Links fornecidos
-const PRESET_VIDEOS = [
-  { id: '1', driveId: '1_j3K-5B8hQNyBpn6dXZYhgMuBLkGuOKJ', title: 'Casamento Cinematic', category: 'Casamento' },
-  { id: '2', driveId: '1BXHON8h2UQjykxBLsmYQfC6MhZdoVVuS', title: 'Filme Institucional', category: 'Institucional' },
-  { id: '3', driveId: '1kcRj9QdAO1EMY7H5wno4HUexhgut2aGr', title: 'Cobertura de Evento', category: 'Evento' },
-  { id: '4', driveId: '1AagfPT9MDPoMxwWpK0Dxez18pT44OHtA', title: 'Aniversário Premium', category: 'Social' },
-  { id: '5', driveId: '1zb-eGCvqgnEIIVaGtCCIpXYjiwqgiWlZ', title: 'Comercial TV', category: 'Publicidade' },
+// LISTA DEFINITIVA MISTA (DRIVE & YOUTUBE)
+const PRESET_VIDEOS: PortfolioVideo[] = [
+  { 
+    id: '1', 
+    title: 'Aniversário: Nayra', 
+    category: 'ANIVERSÁRIO', 
+    url: 'https://drive.google.com/file/d/1_j3K-5B8hQNyBpn6dXZYhgMuBLkGuOKJ/view?usp=sharing',
+    platform: 'drive',
+    embedId: '1_j3K-5B8hQNyBpn6dXZYhgMuBLkGuOKJ'
+  },
+  { 
+    id: '2', 
+    title: 'Casamento: Kathelen & Gean', 
+    category: 'CASAMENTO', 
+    url: 'https://drive.google.com/file/d/1BXHON8h2UQjykxBLsmYQfC6MhZdoVVuS/view?usp=sharing',
+    platform: 'drive',
+    embedId: '1BXHON8h2UQjykxBLsmYQfC6MhZdoVVuS'
+  },
+  { 
+    id: '3', 
+    title: 'Casamento: Layla & Cassio', 
+    category: 'CASAMENTO', 
+    url: 'https://drive.google.com/file/d/1kcRj9QdAO1EMY7H5wno4HUexhgut2aGr/view?usp=sharing',
+    platform: 'drive',
+    embedId: '1kcRj9QdAO1EMY7H5wno4HUexhgut2aGr'
+  },
+  { 
+    id: '4', 
+    title: 'Doc: Rapadura e Economia', 
+    category: 'DOCUMENTÁRIO', 
+    url: 'https://youtu.be/mS5IDat0cbg',
+    platform: 'youtube',
+    embedId: 'mS5IDat0cbg'
+  },
+  { 
+    id: '5', 
+    title: 'Na Mochila com a G (Ep. 04)', 
+    category: 'SÉRIE DE TURISMO', 
+    url: 'https://www.youtube.com/watch?v=k3y9lXdpnKk&t=88s',
+    platform: 'youtube',
+    embedId: 'k3y9lXdpnKk'
+  },
+  { 
+    id: '6', 
+    title: 'Aftermovie: N. Sra. de Fátima', 
+    category: 'EVENTO', 
+    url: 'https://drive.google.com/file/d/1QuYKd2We2yQ_Cyo2yHFmXTJLpDxz2wmr/view?usp=sharing',
+    platform: 'drive',
+    embedId: '1QuYKd2We2yQ_Cyo2yHFmXTJLpDxz2wmr'
+  }
 ];
 
-const LOCAL_STORAGE_KEY = 'guizera_drive_videos_v2025';
+const LOCAL_STORAGE_KEY = 'guizera_portfolio_v2';
 
 const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
-  const [videos, setVideos] = useState<DriveVideo[]>(PRESET_VIDEOS);
+  const [videos, setVideos] = useState<PortfolioVideo[]>(PRESET_VIDEOS);
   const [inputUrl, setInputUrl] = useState('');
   const [category, setCategory] = useState('Geral');
   
   // Player state
-  const [selectedVideo, setSelectedVideo] = useState<DriveVideo | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<PortfolioVideo | null>(null);
   
-  // Initial Load Logic: Merge defaults if local storage is empty or use presets
   useEffect(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (saved) {
@@ -50,17 +98,39 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
   }, [videos]);
 
   const handleAddVideo = () => {
-    const driveId = extractDriveId(inputUrl);
-    if (driveId) {
-        const newVideo: DriveVideo = {
+    // Tenta identificar Youtube
+    const youtubeId = extractYoutubeId(inputUrl);
+    if (youtubeId) {
+        const newVideo: PortfolioVideo = {
             id: Date.now().toString(),
-            driveId,
-            title: `Projeto ${videos.length + 1}`,
-            category: category
+            embedId: youtubeId,
+            title: `Projeto YT ${videos.length + 1}`,
+            category: category,
+            url: inputUrl,
+            platform: 'youtube'
         };
         setVideos([newVideo, ...videos]);
         setInputUrl('');
+        return;
     }
+
+    // Tenta identificar Drive
+    const driveId = extractDriveId(inputUrl);
+    if (driveId) {
+        const newVideo: PortfolioVideo = {
+            id: Date.now().toString(),
+            embedId: driveId,
+            title: `Projeto Drive ${videos.length + 1}`,
+            category: category,
+            url: inputUrl,
+            platform: 'drive'
+        };
+        setVideos([newVideo, ...videos]);
+        setInputUrl('');
+        return;
+    }
+
+    alert('URL inválida. Use links do Google Drive ou YouTube.');
   };
 
   const handleDeleteVideo = (id: string, e: React.MouseEvent) => {
@@ -87,11 +157,11 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
         {/* Admin Input */}
         {isAdmin && (
           <div className="mb-12 bg-darkGray p-6 border border-white/10">
-            <h3 className="text-neon font-bold text-xs uppercase tracking-widest mb-4">Adicionar Projeto</h3>
+            <h3 className="text-neon font-bold text-xs uppercase tracking-widest mb-4">Adicionar Projeto (YouTube ou Drive)</h3>
             <div className="flex gap-4">
               <input 
                 type="text" 
-                placeholder="Google Drive Link" 
+                placeholder="Link do Vídeo" 
                 className="bg-black border border-white/20 text-white p-3 flex-1 text-sm outline-none focus:border-neon"
                 value={inputUrl}
                 onChange={(e) => setInputUrl(e.target.value)}
@@ -125,17 +195,26 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
                 )}
                 
                 {/* Thumbnail Container */}
-                <div className="aspect-video w-full overflow-hidden relative">
-                    <iframe
-                        src={getDriveEmbedUrl(video.driveId)}
-                        className="w-full h-full object-cover pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0"
-                        title={video.title}
-                        loading="lazy"
-                    ></iframe>
+                <div className="aspect-video w-full overflow-hidden relative bg-black">
+                    {video.platform === 'youtube' ? (
+                        <img 
+                            src={getYoutubeThumbnailUrl(video.embedId)} 
+                            alt={video.title}
+                            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 grayscale group-hover:grayscale-0"
+                        />
+                    ) : (
+                        <iframe
+                            src={getDriveEmbedUrl(video.embedId)}
+                            className="w-full h-full object-cover pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0"
+                            title={video.title}
+                            loading="lazy"
+                            tabIndex={-1}
+                        ></iframe>
+                    )}
                     
                     {/* Play Icon Overlay */}
                     <div className="absolute inset-0 flex items-center justify-center z-10">
-                        <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 group-hover:border-neon group-hover:text-neon transition-all duration-300">
+                        <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 group-hover:border-neon group-hover:text-neon transition-all duration-300 bg-black/20">
                             <Play size={20} fill="currentColor" className="text-white group-hover:text-neon transition-colors ml-1" />
                         </div>
                     </div>
@@ -144,7 +223,7 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
                 {/* Info */}
                 <div className="p-6">
                     <span className="text-neon text-[10px] font-bold uppercase tracking-widest mb-2 block">{video.category}</span>
-                    <h3 className="text-white font-heading font-light text-lg uppercase tracking-wide">{video.title}</h3>
+                    <h3 className="text-white font-heading font-light text-lg uppercase tracking-wide leading-tight">{video.title}</h3>
                 </div>
             </div>
           ))}
@@ -158,24 +237,27 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
                 <button className="absolute -top-10 right-0 text-white hover:text-neon transition-colors" onClick={() => setSelectedVideo(null)}>
                     <X size={24} />
                 </button>
+                
+                {/* Player Condicional */}
                 <iframe
-                    src={getDriveEmbedUrl(selectedVideo.driveId)}
+                    src={selectedVideo.platform === 'youtube' ? getYoutubeEmbedUrl(selectedVideo.embedId) : getDriveEmbedUrl(selectedVideo.embedId)}
                     className="w-full h-full"
-                    allow="autoplay; fullscreen"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                     allowFullScreen
                     title={selectedVideo.title}
                 ></iframe>
+
                 <div className="absolute -bottom-10 left-0">
                     <h3 className="text-white font-heading font-bold uppercase tracking-widest text-sm">{selectedVideo.title}</h3>
                 </div>
                 <div className="absolute -bottom-10 right-0">
                      <a 
-                      href={getDriveEmbedUrl(selectedVideo.driveId).replace('/preview', '/view')} 
+                      href={selectedVideo.url} 
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors"
                     >
-                        Abrir no Drive <ExternalLink size={12} />
+                        Abrir Original <ExternalLink size={12} />
                     </a>
                 </div>
             </div>

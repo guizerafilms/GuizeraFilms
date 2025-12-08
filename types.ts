@@ -1,10 +1,12 @@
 import React from 'react';
 
-export interface DriveVideo {
+export interface PortfolioVideo {
   id: string;
-  driveId: string;
-  title?: string;
+  embedId: string; // ID do arquivo no Drive ou ID do vídeo no Youtube
+  title: string;
   category: string;
+  url: string; // URL original completa
+  platform: 'youtube' | 'drive';
 }
 
 export interface InstaVideo {

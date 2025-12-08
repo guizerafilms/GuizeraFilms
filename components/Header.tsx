@@ -23,6 +23,8 @@ const Header: React.FC = () => {
     { name: 'Contato', href: 'contato' },
   ];
 
+  const whatsappLink = "https://wa.me/5577991847405";
+
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10 h-20">
       <div className="container mx-auto px-6 h-full flex justify-between items-center">
@@ -55,8 +57,9 @@ const Header: React.FC = () => {
         {/* CTA BUTTON (RIGHT) */}
         <div className="hidden md:block">
             <a 
-                href="#contato"
-                onClick={(e) => handleNavClick(e, 'contato')}
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-neon hover:bg-neonHover text-white font-heading font-bold text-xs px-6 py-3 uppercase tracking-widest transition-all duration-300 transform hover:scale-105"
             >
                 Orçamento
@@ -85,8 +88,9 @@ const Header: React.FC = () => {
               </a>
             ))}
             <a 
-                href="#contato"
-                onClick={(e) => handleNavClick(e, 'contato')}
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-8 bg-neon text-white font-heading font-bold text-sm px-10 py-4 uppercase tracking-widest"
             >
                 Orçamento

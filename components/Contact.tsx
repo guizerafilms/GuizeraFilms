@@ -16,9 +16,9 @@ const Contact: React.FC = () => {
         </p>
 
         <a 
-            href="https://wa.me/5511999999999" 
+            href="https://wa.me/5577991847405" 
             target="_blank" 
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-4 bg-neon hover:bg-neonHover text-white font-heading font-bold text-sm px-10 py-5 uppercase tracking-widest transition-all duration-300 transform hover:scale-105"
         >
             Iniciar Conversa <ArrowRight size={18} />
@@ -26,7 +26,7 @@ const Contact: React.FC = () => {
         
         <div className="mt-16 flex flex-col md:flex-row justify-center gap-8 md:gap-16 text-gray-500 text-xs uppercase tracking-widest">
             <p>contato@guizerafilms.com</p>
-            <p>São Paulo - SP</p>
+            <p>Bahia, Brasil</p>
             <p>@guizerafilms</p>
         </div>
 
