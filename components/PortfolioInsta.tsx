@@ -74,8 +74,8 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                 return (
                     <div 
                         key={index} 
-                        // Altura fixa (h-[280px]) no mobile para garantir alinhamento da grade
-                        className="relative w-full h-[280px] md:h-auto md:aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-all duration-500 cursor-pointer rounded-sm"
+                        // Altura fixa (h-[350px]) no mobile conforme solicitado
+                        className="relative w-full h-[350px] md:h-auto md:aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-all duration-500 cursor-pointer rounded-sm"
                         onClick={() => handleVideoClick(video, index)}
                     >
                         

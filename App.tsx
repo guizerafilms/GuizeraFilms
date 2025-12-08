@@ -45,7 +45,7 @@ function App() {
       {/* GLOBAL VIDEO MODAL */}
       {selectedVideo && (
         <div 
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm" 
+            className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-10 backdrop-blur-sm" 
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)' }}
             onClick={() => setSelectedVideo(null)}
         >
@@ -53,8 +53,8 @@ function App() {
                 className={`
                     bg-black border border-white/10 relative shadow-2xl shadow-neon/10 
                     ${isVertical 
-                        ? 'w-[90vw] max-h-[90vh] aspect-[9/16] md:w-auto md:h-[85vh]' 
-                        : 'w-[95vw] max-w-5xl aspect-video'
+                        ? 'w-full aspect-[9/16] md:w-auto md:h-[85vh]' 
+                        : 'w-full aspect-video max-w-5xl'
                     }
                 `}
                 onClick={(e) => e.stopPropagation()}
