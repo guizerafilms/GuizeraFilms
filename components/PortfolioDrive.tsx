@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Play, Trash2, X, ExternalLink } from 'lucide-react';
+import { Plus, Play, Trash2 } from 'lucide-react';
 import { 
     extractDriveId, 
-    getDriveEmbedUrl, 
     extractYoutubeId, 
-    getYoutubeEmbedUrl, 
-    getYoutubeThumbnailUrl 
+    getYoutubeThumbnailUrl,
+    getDriveEmbedUrl
 } from '../utils/urlHelpers';
 import { PortfolioVideo } from '../types';
 
 interface PortfolioDriveProps {
   isAdmin: boolean;
+  onVideoSelect: (video: PortfolioVideo) => void;
 }
 
 // LISTA DEFINITIVA MISTA (DRIVE & YOUTUBE)
@@ -67,13 +67,10 @@ const PRESET_VIDEOS: PortfolioVideo[] = [
 
 const LOCAL_STORAGE_KEY = 'guizera_portfolio_v2';
 
-const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
+const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin, onVideoSelect }) => {
   const [videos, setVideos] = useState<PortfolioVideo[]>(PRESET_VIDEOS);
   const [inputUrl, setInputUrl] = useState('');
   const [category, setCategory] = useState('Geral');
-  
-  // Player state
-  const [selectedVideo, setSelectedVideo] = useState<PortfolioVideo | null>(null);
   
   useEffect(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -186,7 +183,7 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
             <div 
                 key={video.id} 
                 className="group relative bg-darkGray cursor-pointer border border-white/5 hover:border-neon/50 transition-all duration-300"
-                onClick={() => setSelectedVideo(video)}
+                onClick={() => onVideoSelect(video)}
             >
                 {isAdmin && (
                     <button onClick={(e) => handleDeleteVideo(video.id, e)} className="absolute top-2 right-2 z-20 bg-red-600 p-1 text-white opacity-0 group-hover:opacity-100">
@@ -229,40 +226,6 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin }) => {
           ))}
         </div>
       </div>
-
-      {/* Lightbox */}
-      {selectedVideo && (
-        <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md" onClick={() => setSelectedVideo(null)}>
-            <div className="w-full max-w-5xl aspect-video bg-black border border-white/10 relative shadow-2xl shadow-neon/10">
-                <button className="absolute -top-10 right-0 text-white hover:text-neon transition-colors" onClick={() => setSelectedVideo(null)}>
-                    <X size={24} />
-                </button>
-                
-                {/* Player Condicional */}
-                <iframe
-                    src={selectedVideo.platform === 'youtube' ? getYoutubeEmbedUrl(selectedVideo.embedId) : getDriveEmbedUrl(selectedVideo.embedId)}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                    allowFullScreen
-                    title={selectedVideo.title}
-                ></iframe>
-
-                <div className="absolute -bottom-10 left-0">
-                    <h3 className="text-white font-heading font-bold uppercase tracking-widest text-sm">{selectedVideo.title}</h3>
-                </div>
-                <div className="absolute -bottom-10 right-0">
-                     <a 
-                      href={selectedVideo.url} 
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors"
-                    >
-                        Abrir Original <ExternalLink size={12} />
-                    </a>
-                </div>
-            </div>
-        </div>
-      )}
     </section>
   );
 };

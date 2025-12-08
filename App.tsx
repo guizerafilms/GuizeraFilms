@@ -7,9 +7,13 @@ import PortfolioInsta from './components/PortfolioInsta';
 import Services from './components/Services';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import { PortfolioVideo } from './types';
+import { X, ExternalLink } from 'lucide-react';
+import { getDriveEmbedUrl, getYoutubeEmbedUrl } from './utils/urlHelpers';
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<PortfolioVideo | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -23,8 +27,8 @@ function App() {
       <Header />
       <main>
         <Hero />
-        <PortfolioDrive isAdmin={isAdmin} />
-        <PortfolioInsta isAdmin={isAdmin} />
+        <PortfolioDrive isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
+        <PortfolioInsta isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
         <About />
         <Services />
         <Contact />
@@ -33,6 +37,46 @@ function App() {
       {isAdmin && (
         <div className="fixed bottom-4 right-4 bg-neon text-white text-[10px] px-3 py-1 uppercase tracking-widest z-50 opacity-70 pointer-events-none shadow-lg font-bold">
           Admin Mode
+        </div>
+      )}
+
+      {/* GLOBAL VIDEO MODAL */}
+      {selectedVideo && (
+        <div 
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm" 
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)' }}
+            onClick={() => setSelectedVideo(null)}
+        >
+            <div 
+                className={`w-full max-w-5xl bg-black border border-white/10 relative shadow-2xl shadow-neon/10 ${selectedVideo.id.startsWith('insta') ? 'aspect-[9/16] max-w-[50vh]' : 'aspect-video'}`}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <button className="absolute -top-10 right-0 text-white hover:text-neon transition-colors" onClick={() => setSelectedVideo(null)}>
+                    <X size={24} />
+                </button>
+                
+                <iframe
+                    src={selectedVideo.platform === 'youtube' ? getYoutubeEmbedUrl(selectedVideo.embedId) : getDriveEmbedUrl(selectedVideo.embedId)}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                    allowFullScreen
+                    title={selectedVideo.title}
+                ></iframe>
+
+                <div className="absolute -bottom-10 left-0">
+                    <h3 className="text-white font-heading font-bold uppercase tracking-widest text-sm">{selectedVideo.title}</h3>
+                </div>
+                <div className="absolute -bottom-10 right-0">
+                     <a 
+                      href={selectedVideo.url} 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors"
+                    >
+                        Abrir Original <ExternalLink size={12} />
+                    </a>
+                </div>
+            </div>
         </div>
       )}
     </div>

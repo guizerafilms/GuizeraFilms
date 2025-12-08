@@ -1,12 +1,14 @@
 import React from 'react';
 import { Smartphone, Play } from 'lucide-react';
 import { getDriveEmbedUrl, extractDriveId } from '../utils/urlHelpers';
+import { PortfolioVideo } from '../types';
 
 interface PortfolioInstaProps {
   isAdmin: boolean;
+  onVideoSelect: (video: PortfolioVideo) => void;
 }
 
-const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin }) => {
+const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect }) => {
   
   const verticalVideos = [
     {
@@ -36,6 +38,20 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin }) => {
     }
   ];
 
+  const handleVideoClick = (video: typeof verticalVideos[0], index: number) => {
+    const driveId = extractDriveId(video.url);
+    if (driveId) {
+        onVideoSelect({
+            id: `insta-${index}`,
+            embedId: driveId,
+            title: video.title,
+            category: video.category,
+            url: video.url,
+            platform: 'drive'
+        });
+    }
+  };
+
   return (
     <section id="verticais" className="py-24 bg-darkGray border-t border-white/5">
       <div className="container mx-auto px-6">
@@ -56,13 +72,17 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin }) => {
                 const embedUrl = driveId ? getDriveEmbedUrl(driveId) : '';
 
                 return (
-                    <div key={index} className="aspect-[9/16] bg-black border border-white/5 group relative overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-colors duration-500">
+                    <div 
+                        key={index} 
+                        className="aspect-[9/16] bg-black border border-white/5 group relative overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-colors duration-500 cursor-pointer"
+                        onClick={() => handleVideoClick(video, index)}
+                    >
                         
                         {/* Iframe Background */}
                         {embedUrl ? (
                             <iframe 
                                 src={embedUrl}
-                                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-300 grayscale group-hover:grayscale-0"
+                                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-300 grayscale group-hover:grayscale-0 pointer-events-none"
                                 title={video.title}
                                 loading="lazy"
                             ></iframe>
@@ -83,16 +103,13 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin }) => {
                         </div>
 
                         {/* External Link Button (appears on hover) */}
-                        <a 
-                            href={video.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
+                        <div 
                             className="absolute inset-0 z-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]"
                         >
-                            <div className="bg-neon text-white p-3 rounded-full transform scale-50 group-hover:scale-100 transition-transform duration-300">
+                            <div className="bg-neon text-white p-3 rounded-full transform scale-50 group-hover:scale-100 transition-transform duration-300 shadow-lg shadow-neon/50">
                                 <Play size={20} fill="currentColor" />
                             </div>
-                        </a>
+                        </div>
 
                         {/* Scanline Effect */}
                         <div className="absolute inset-0 bg-white/5 h-[1px] w-full animate-float opacity-0 group-hover:opacity-20 pointer-events-none"></div>
