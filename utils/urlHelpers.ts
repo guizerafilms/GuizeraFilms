@@ -19,18 +19,24 @@ export const extractInstaId = (url: string): string | null => {
   return match ? match[2] : null;
 };
 
-export const getDriveEmbedUrl = (driveId: string): string => {
-  // Adiciona autoplay=1 para tentar iniciar automaticamente (suporte limitado no Drive)
-  return `https://drive.google.com/file/d/${driveId}/preview?autoplay=1`;
-};
+// LÓGICA DE EMBED INTELIGENTE
+export const getEmbedUrl = (platform: 'youtube' | 'drive', id: string): string => {
+  if (platform === 'drive') {
+    // CRUCIAL: Drive DEVE usar /preview para embed. 
+    // NÃO adicionar autoplay=1 pois quebra o player do Drive em iframes externos.
+    return `https://drive.google.com/file/d/${id}/preview`;
+  }
 
-export const getYoutubeEmbedUrl = (videoId: string): string => {
-  // Garante autoplay, mute (para permitir autoplay em alguns browsers) e interface limpa
-  return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+  if (platform === 'youtube') {
+    // YouTube aceita e recomenda parâmetros para controle de UI
+    // mute=0 tenta som, mas browsers podem bloquear autoplay com som.
+    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&rel=0&showinfo=0&modestbranding=1&playsinline=1`;
+  }
+
+  return '';
 };
 
 export const getYoutubeThumbnailUrl = (videoId: string): string => {
-  // Uses the high quality thumbnail from YouTube
   return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 };
 

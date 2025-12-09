@@ -9,7 +9,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { PortfolioVideo } from './types';
 import { X, ExternalLink } from 'lucide-react';
-import { getDriveEmbedUrl, getYoutubeEmbedUrl } from './utils/urlHelpers';
+import { getEmbedUrl } from './utils/urlHelpers';
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -46,40 +46,47 @@ function App() {
       {selectedVideo && (
         <div 
             className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-10 backdrop-blur-sm" 
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)' }}
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
             onClick={() => setSelectedVideo(null)}
         >
             <div 
                 className={`
                     bg-black border border-white/10 relative shadow-2xl shadow-neon/10 
                     ${isVertical 
-                        ? 'w-full aspect-[9/16] md:w-auto md:h-[85vh]' 
-                        : 'w-full aspect-video max-w-5xl'
+                        ? 'w-full h-full md:w-auto md:h-[90vh] aspect-[9/16]' 
+                        : 'w-full aspect-video max-w-6xl'
                     }
                 `}
                 onClick={(e) => e.stopPropagation()}
             >
-                <button className="absolute -top-10 right-0 text-white hover:text-neon transition-colors" onClick={() => setSelectedVideo(null)}>
-                    <X size={24} />
+                {/* Close Button */}
+                <button 
+                  className="absolute -top-12 right-0 md:-right-10 text-white hover:text-neon transition-colors p-2" 
+                  onClick={() => setSelectedVideo(null)}
+                >
+                    <X size={32} />
                 </button>
                 
+                {/* IFRAME - Lógica unificada de Embed */}
                 <iframe
-                    src={selectedVideo.platform === 'youtube' ? getYoutubeEmbedUrl(selectedVideo.embedId) : getDriveEmbedUrl(selectedVideo.embedId)}
+                    src={getEmbedUrl(selectedVideo.platform, selectedVideo.embedId)}
                     className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                     title={selectedVideo.title}
                 ></iframe>
 
-                <div className="absolute -bottom-10 left-0">
-                    <h3 className="text-white font-heading font-bold uppercase tracking-widest text-sm truncate max-w-[200px] md:max-w-none">{selectedVideo.title}</h3>
+                {/* Footer Info (Desktop Only mostly) */}
+                <div className="absolute -bottom-8 left-0 hidden md:block">
+                    <h3 className="text-gray-400 font-heading text-xs uppercase tracking-widest">{selectedVideo.title}</h3>
                 </div>
+                
                 <div className="absolute -bottom-10 right-0">
                      <a 
                       href={selectedVideo.url} 
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors"
+                      className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors bg-black/50 px-3 py-1 rounded-full border border-white/10"
                     >
                         Abrir Original <ExternalLink size={12} />
                     </a>
