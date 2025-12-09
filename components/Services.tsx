@@ -23,7 +23,7 @@ const Services: React.FC = () => {
           {services.map((service, index) => (
             <div 
               key={index}
-              className="group p-10 bg-darkGray border border-white/5 hover:bg-white hover:text-black transition-all duration-500"
+              className="group p-10 bg-darkGray border border-white/5 hover:bg-white hover:text-black hover:shadow-[0_0_30px_rgba(130,87,229,0.25)] transition-all duration-500"
             >
               <div className="text-neon group-hover:text-black transition-colors mb-6">
                 {service.icon}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChevronDown } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
@@ -64,6 +65,11 @@ const Hero: React.FC = () => {
           >
             Ver Portfólio
           </a>
+        </div>
+
+        {/* SCROLL INDICATOR */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce opacity-70 hover:opacity-100 transition-opacity cursor-pointer" onClick={(e) => handleScroll(e as any, 'portfolio')}>
+            <ChevronDown className="text-white w-8 h-8" />
         </div>
       </div>
     </section>
