@@ -65,7 +65,7 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
             </p>
         </div>
 
-        {/* Vertical Grid - Configuração Rígida para Mobile */}
+        {/* Vertical Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
             {verticalVideos.map((video, index) => {
                 const driveId = extractDriveId(video.url);
@@ -74,21 +74,25 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                 return (
                     <div 
                         key={index} 
-                        // Altura fixa (h-[350px]) no mobile conforme solicitado
-                        className="relative w-full h-[350px] md:h-auto md:aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center hover:border-neon/30 transition-all duration-500 cursor-pointer rounded-sm"
+                        // UX FIX: Removido 'hover:' e 'transition' do mobile. 
+                        // Adicionado 'active:opacity-90' para feedback tátil imediato.
+                        // O uso de 'md:hover' garante que o iOS não intercepte o primeiro toque como hover.
+                        className="relative w-full h-[350px] md:h-auto md:aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center md:hover:border-neon/30 md:transition-all md:duration-500 cursor-pointer rounded-sm active:scale-[0.98] md:active:scale-100"
                         onClick={() => handleVideoClick(video, index)}
                     >
                         
-                        {/* Iframe Background - Full Size */}
+                        {/* Iframe Background - Full Size & Static on Mobile */}
                         {embedUrl ? (
                             <div className="absolute inset-0 w-full h-full">
                                 <iframe 
                                     src={embedUrl}
-                                    className="w-full h-full object-cover pointer-events-none transition-all duration-500 grayscale-0 md:grayscale opacity-70 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0"
+                                    // UX FIX: grayscale-0 (colorido) sempre no mobile. md:grayscale (PB) no desktop.
+                                    // Removemos transitions no mobile para evitar 'flash' ou achatamento no toque.
+                                    className="w-full h-full object-cover pointer-events-none grayscale-0 md:grayscale opacity-70 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0 md:transition-all md:duration-500"
                                     title={video.title}
                                     loading="lazy"
                                     scrolling="no"
-                                    style={{ transform: 'scale(1.02)' }} // Leve zoom para cobrir bordas
+                                    style={{ transform: 'scale(1.02)' }}
                                 ></iframe>
                             </div>
                         ) : (
@@ -96,10 +100,10 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                         )}
 
                         {/* Overlay Gradient - Sempre visível no mobile */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 md:transition-opacity md:duration-300"></div>
                         
                         {/* Info Content - Sempre visível no mobile */}
-                        <div className="absolute bottom-3 left-0 w-full px-2 text-center z-20 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="absolute bottom-3 left-0 w-full px-2 text-center z-20 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 md:transition-opacity md:duration-300">
                              <div className="flex justify-center mb-1">
                                 <Smartphone className="text-neon w-4 h-4 md:w-6 md:h-6" />
                              </div>
@@ -109,9 +113,10 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
 
                         {/* Play Button - Sempre visível no mobile */}
                         <div 
-                            className="absolute inset-0 z-30 flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
+                            className="absolute inset-0 z-30 flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 md:transition-opacity md:duration-300 pointer-events-none"
                         >
-                            <div className="border border-white/40 bg-black/20 backdrop-blur-[2px] text-white p-3 rounded-full transform scale-75 md:scale-50 md:group-hover:scale-100 transition-all duration-300 shadow-sm md:shadow-lg hover:bg-neon hover:border-neon hover:text-white">
+                            {/* O botão em si é visual, o clique é no container pai */}
+                            <div className="border border-white/40 bg-black/20 backdrop-blur-[2px] text-white p-3 rounded-full shadow-sm md:shadow-lg md:group-hover:scale-110 md:transition-transform md:duration-300">
                                 <Play size={20} fill="currentColor" className="ml-1" />
                             </div>
                         </div>

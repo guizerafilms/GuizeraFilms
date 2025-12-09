@@ -20,11 +20,13 @@ export const extractInstaId = (url: string): string | null => {
 };
 
 export const getDriveEmbedUrl = (driveId: string): string => {
-  return `https://drive.google.com/file/d/${driveId}/preview`;
+  // Adiciona autoplay=1 para tentar iniciar automaticamente (suporte limitado no Drive)
+  return `https://drive.google.com/file/d/${driveId}/preview?autoplay=1`;
 };
 
 export const getYoutubeEmbedUrl = (videoId: string): string => {
-  return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+  // Garante autoplay, mute (para permitir autoplay em alguns browsers) e interface limpa
+  return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
 };
 
 export const getYoutubeThumbnailUrl = (videoId: string): string => {

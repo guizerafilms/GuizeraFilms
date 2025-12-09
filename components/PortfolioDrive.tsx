@@ -182,7 +182,7 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin, onVideoSelect 
           {videos.map((video) => (
             <div 
                 key={video.id} 
-                className="group relative bg-darkGray cursor-pointer border border-white/5 hover:border-neon/50 transition-all duration-300"
+                className="group relative bg-darkGray cursor-pointer border border-white/5 md:hover:border-neon/50 md:transition-all md:duration-300 active:scale-[0.98] md:active:scale-100"
                 onClick={() => onVideoSelect(video)}
             >
                 {isAdmin && (
@@ -197,22 +197,22 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin, onVideoSelect 
                         <img 
                             src={getYoutubeThumbnailUrl(video.embedId)} 
                             alt={video.title}
-                            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 grayscale group-hover:grayscale-0"
+                            className="w-full h-full object-cover opacity-80 md:group-hover:opacity-100 md:group-hover:scale-105 md:transition-all md:duration-500 grayscale md:group-hover:grayscale-0"
                         />
                     ) : (
                         <iframe
                             src={getDriveEmbedUrl(video.embedId)}
-                            className="w-full h-full object-cover pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0"
+                            className="w-full h-full object-cover pointer-events-none opacity-60 md:group-hover:opacity-100 md:transition-opacity md:duration-500 grayscale md:group-hover:grayscale-0"
                             title={video.title}
                             loading="lazy"
                             tabIndex={-1}
                         ></iframe>
                     )}
                     
-                    {/* Play Icon Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center z-10">
-                        <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 group-hover:border-neon group-hover:text-neon transition-all duration-300 bg-black/20">
-                            <Play size={20} fill="currentColor" className="text-white group-hover:text-neon transition-colors ml-1" />
+                    {/* Play Icon Overlay - Sempre visível e estático no mobile, interativo no desktop */}
+                    <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                        <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center backdrop-blur-sm bg-black/20 md:group-hover:scale-110 md:group-hover:border-neon md:group-hover:text-neon md:transition-all md:duration-300">
+                            <Play size={20} fill="currentColor" className="text-white md:group-hover:text-neon md:transition-colors ml-1" />
                         </div>
                     </div>
                 </div>
