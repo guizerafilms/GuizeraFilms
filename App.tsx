@@ -78,13 +78,11 @@ function App() {
         >
             <div 
                 className={`
-                    bg-black border-none md:border md:border-white/10 relative shadow-2xl shadow-neon/10 
+                    bg-black border-none md:border md:border-white/10 relative shadow-2xl shadow-neon/10 flex items-center justify-center
                     ${isVertical 
                         // CSS FIX CRÍTICO PARA MOBILE:
-                        // 1. Removido h-full. O h-full forçava o vídeo a esticar.
-                        // 2. aspect-[9/16] força o formato correto do player.
-                        // 3. max-h-[80vh] garante que em celulares muito altos, ele não fique gigante, e em celulares pequenos ele caiba.
-                        // 4. w-full faz ele usar a largura disponível até atingir o limite de aspect ratio.
+                        // 1. aspect-[9/16] e max-h-[85vh]: Garante formato vertical correto.
+                        // 2. w-full: Tenta preencher a largura disponível dentro do limite de altura.
                         ? 'w-full aspect-[9/16] max-h-[85vh] md:w-auto md:h-[90vh]' 
                         : 'w-full aspect-video max-w-6xl'
                     }
@@ -103,6 +101,7 @@ function App() {
                 </button>
                 
                 {/* IFRAME - Lógica unificada de Embed */}
+                {/* allow="autoplay" é crucial aqui */}
                 <iframe
                     src={getEmbedUrl(selectedVideo.platform, selectedVideo.embedId)}
                     className="w-full h-full"

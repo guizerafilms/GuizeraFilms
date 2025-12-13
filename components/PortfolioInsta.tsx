@@ -74,21 +74,23 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                 return (
                     <div 
                         key={index} 
-                        // CSS FIX: 
-                        // 1. aspect-[9/16] força o formato vertical correto.
-                        // 2. flex justify-center items-center centraliza o iframe/conteúdo, evitando espaço na esquerda.
-                        // 3. overflow-hidden corta qualquer excesso que possa causar scroll horizontal.
-                        className="relative w-full aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center md:hover:border-neon/30 md:transition-all md:duration-500 cursor-pointer rounded-sm active:opacity-90 active:scale-[0.98] md:active:scale-100"
+                        // CSS FIX DEFINITIVO:
+                        // 1. aspect-[9/16]: Define a proporção física do card.
+                        // 2. relative block: Removemos flex/justify para evitar espaços vazios.
+                        // 3. w-full: Garante que o card ocupe a coluna do grid.
+                        className="relative w-full aspect-[9/16] bg-black border border-white/5 group overflow-hidden cursor-pointer rounded-sm active:opacity-90 active:scale-[0.98] md:active:scale-100 md:hover:border-neon/30 md:transition-all md:duration-500"
                         onClick={() => handleVideoClick(video, index)}
                     >
                         
                         {/* Iframe Background */}
                         {embedUrl ? (
-                            <div className="absolute inset-0 w-full h-full pointer-events-none flex justify-center items-center">
+                            <div className="absolute inset-0 w-full h-full pointer-events-none bg-black">
                                 <iframe 
                                     src={embedUrl}
-                                    // CSS FIX: object-cover garante que o iframe preencha o container sem distorcer (dentro do possível para iframes)
-                                    className="w-full h-full object-cover grayscale-0 md:grayscale opacity-70 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0 md:transition-all md:duration-500"
+                                    // CSS FIX: 
+                                    // absolute inset-0 w-full h-full: Força o iframe a ocupar CADA pixel do container pai.
+                                    // object-cover: Tenta ajustar o conteúdo (depende do suporte do browser para iframe, mas ajuda).
+                                    className="absolute inset-0 w-full h-full object-cover grayscale-0 md:grayscale opacity-70 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0 md:transition-all md:duration-500"
                                     title={video.title}
                                     loading="lazy"
                                     scrolling="no"

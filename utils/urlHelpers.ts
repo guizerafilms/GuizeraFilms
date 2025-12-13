@@ -23,14 +23,13 @@ export const extractInstaId = (url: string): string | null => {
 export const getEmbedUrl = (platform: 'youtube' | 'drive', id: string): string => {
   if (platform === 'drive') {
     // CRUCIAL: Drive DEVE usar /preview para embed. 
-    // NÃO adicionar autoplay=1 pois quebra o player do Drive em iframes externos.
+    // Autoplay em Drive é limitado, mas mantemos o link limpo para load rápido.
     return `https://drive.google.com/file/d/${id}/preview`;
   }
 
   if (platform === 'youtube') {
-    // YouTube aceita e recomenda parâmetros para controle de UI
-    // mute=0 tenta som, mas browsers podem bloquear autoplay com som.
-    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&rel=0&showinfo=0&modestbranding=1&playsinline=1`;
+    // YouTube: autoplay=1 e mute=1 aumentam drasticamente a chance do vídeo rodar de primeira.
+    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&rel=0&showinfo=0&modestbranding=1&playsinline=1`;
   }
 
   return '';
