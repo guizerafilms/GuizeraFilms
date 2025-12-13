@@ -74,8 +74,8 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                 return (
                     <div 
                         key={index} 
-                        // REVERTED: Usando h-[350px] fixo novamente ao invés de aspect ratio puro
-                        className="relative w-full h-[350px] md:h-auto md:aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center md:hover:border-neon/30 md:transition-all md:duration-500 cursor-pointer rounded-sm active:opacity-90 active:scale-[0.98] md:active:scale-100"
+                        // CORREÇÃO: aspect-[9/16] garante a proporção correta sem achatar
+                        className="relative w-full aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center md:hover:border-neon/30 md:transition-all md:duration-500 cursor-pointer rounded-sm active:opacity-90 active:scale-[0.98] md:active:scale-100"
                         onClick={() => handleVideoClick(video, index)}
                     >
                         

@@ -22,6 +22,33 @@ function App() {
     }
   }, []);
 
+  // History API Handler: Fecha o modal ao clicar no botão Voltar do navegador
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      // Se o usuário clicar em voltar, o modal fecha
+      setSelectedVideo(null);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Wrapper para abrir vídeo e adicionar estado no histórico
+  const handleOpenVideo = (video: PortfolioVideo) => {
+    setSelectedVideo(video);
+    // Adiciona uma entrada no histórico para que o botão "Voltar" funcione
+    window.history.pushState({ modalOpen: true }, '', window.location.pathname);
+  };
+
+  // Wrapper para fechar vídeo (chama history.back para manter consistência)
+  const handleCloseVideo = () => {
+    if (selectedVideo) {
+      // Ao invés de setar null direto, voltamos no histórico.
+      // O listener 'popstate' vai capturar isso e fechar o modal.
+      window.history.back();
+    }
+  };
+
   const isVertical = selectedVideo?.id.startsWith('insta');
 
   return (
@@ -29,8 +56,8 @@ function App() {
       <Header />
       <main>
         <Hero />
-        <PortfolioDrive isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
-        <PortfolioInsta isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
+        <PortfolioDrive isAdmin={isAdmin} onVideoSelect={handleOpenVideo} />
+        <PortfolioInsta isAdmin={isAdmin} onVideoSelect={handleOpenVideo} />
         <About />
         <Services />
         <Contact />
@@ -45,27 +72,31 @@ function App() {
       {/* GLOBAL VIDEO MODAL */}
       {selectedVideo && (
         <div 
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 backdrop-blur-sm" 
+            className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-10 backdrop-blur-sm" 
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
-            onClick={() => setSelectedVideo(null)}
+            onClick={handleCloseVideo}
         >
             <div 
                 className={`
-                    bg-black border border-white/10 relative shadow-2xl shadow-neon/10 
+                    bg-black border-none md:border md:border-white/10 relative shadow-2xl shadow-neon/10 
                     ${isVertical 
-                        // REVERTED: Voltando para w-full h-full no mobile
-                        ? 'w-full h-full md:w-auto md:h-[90vh] aspect-[9/16]' 
+                        // Vertical: Mobile ocupa altura total, Desktop mantêm proporção
+                        ? 'w-full h-full md:w-auto md:h-[90vh] md:aspect-[9/16]' 
                         : 'w-full aspect-video max-w-6xl'
                     }
                 `}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Close Button - Larger touch target for mobile */}
+                {/* 
+                  Close Button - FIX CRÍTICO 
+                  Mobile: Fixed (flutua sobre tudo), Top Right, Fundo escuro
+                  Desktop: Absolute (relativo ao container), Outside, Sem fundo
+                */}
                 <button 
-                  className="absolute -top-12 right-0 md:-right-10 text-white hover:text-neon transition-colors p-2" 
-                  onClick={() => setSelectedVideo(null)}
+                  className="fixed top-4 right-4 z-[120] bg-black/60 rounded-full p-2 md:absolute md:-top-10 md:-right-10 md:bg-transparent md:p-2 text-white hover:text-neon transition-colors" 
+                  onClick={handleCloseVideo}
                 >
-                    <X size={32} />
+                    <X size={24} className="md:w-8 md:h-8" />
                 </button>
                 
                 {/* IFRAME - Lógica unificada de Embed */}
@@ -77,17 +108,18 @@ function App() {
                     title={selectedVideo.title}
                 ></iframe>
 
-                {/* Footer Info (Desktop Only mostly) */}
+                {/* Footer Info (Desktop Only) */}
                 <div className="absolute -bottom-8 left-0 hidden md:block">
                     <h3 className="text-gray-400 font-heading text-xs uppercase tracking-widest">{selectedVideo.title}</h3>
                 </div>
                 
-                <div className="absolute -bottom-12 md:-bottom-10 right-0">
+                {/* External Link (Desktop Only to avoid mobile clutter) */}
+                <div className="hidden md:block absolute -bottom-10 right-0">
                      <a 
                       href={selectedVideo.url} 
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors bg-black/50 px-3 py-2 md:py-1 rounded-full border border-white/10"
+                      className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors bg-black/50 px-3 py-1 rounded-full border border-white/10"
                     >
                         Abrir Original <ExternalLink size={12} />
                     </a>
