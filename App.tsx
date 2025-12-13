@@ -80,17 +80,20 @@ function App() {
                 className={`
                     bg-black border-none md:border md:border-white/10 relative shadow-2xl shadow-neon/10 
                     ${isVertical 
-                        // Vertical: Mobile ocupa altura total, Desktop mantêm proporção
-                        ? 'w-full h-full md:w-auto md:h-[90vh] md:aspect-[9/16]' 
+                        // CSS FIX CRÍTICO PARA MOBILE:
+                        // 1. Removido h-full. O h-full forçava o vídeo a esticar.
+                        // 2. aspect-[9/16] força o formato correto do player.
+                        // 3. max-h-[80vh] garante que em celulares muito altos, ele não fique gigante, e em celulares pequenos ele caiba.
+                        // 4. w-full faz ele usar a largura disponível até atingir o limite de aspect ratio.
+                        ? 'w-full aspect-[9/16] max-h-[85vh] md:w-auto md:h-[90vh]' 
                         : 'w-full aspect-video max-w-6xl'
                     }
                 `}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 
-                  Close Button - FIX CRÍTICO 
-                  Mobile: Fixed (flutua sobre tudo), Top Right, Fundo escuro
-                  Desktop: Absolute (relativo ao container), Outside, Sem fundo
+                  Close Button
+                  Mobile: Fixed top-right, Z-index alto.
                 */}
                 <button 
                   className="fixed top-4 right-4 z-[120] bg-black/60 rounded-full p-2 md:absolute md:-top-10 md:-right-10 md:bg-transparent md:p-2 text-white hover:text-neon transition-colors" 
@@ -113,7 +116,7 @@ function App() {
                     <h3 className="text-gray-400 font-heading text-xs uppercase tracking-widest">{selectedVideo.title}</h3>
                 </div>
                 
-                {/* External Link (Desktop Only to avoid mobile clutter) */}
+                {/* External Link */}
                 <div className="hidden md:block absolute -bottom-10 right-0">
                      <a 
                       href={selectedVideo.url} 

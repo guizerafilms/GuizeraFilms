@@ -74,21 +74,25 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                 return (
                     <div 
                         key={index} 
-                        // CORREÇÃO: aspect-[9/16] garante a proporção correta sem achatar
+                        // CSS FIX: 
+                        // 1. aspect-[9/16] força o formato vertical correto.
+                        // 2. flex justify-center items-center centraliza o iframe/conteúdo, evitando espaço na esquerda.
+                        // 3. overflow-hidden corta qualquer excesso que possa causar scroll horizontal.
                         className="relative w-full aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center md:hover:border-neon/30 md:transition-all md:duration-500 cursor-pointer rounded-sm active:opacity-90 active:scale-[0.98] md:active:scale-100"
                         onClick={() => handleVideoClick(video, index)}
                     >
                         
                         {/* Iframe Background */}
                         {embedUrl ? (
-                            <div className="absolute inset-0 w-full h-full pointer-events-none">
+                            <div className="absolute inset-0 w-full h-full pointer-events-none flex justify-center items-center">
                                 <iframe 
                                     src={embedUrl}
+                                    // CSS FIX: object-cover garante que o iframe preencha o container sem distorcer (dentro do possível para iframes)
                                     className="w-full h-full object-cover grayscale-0 md:grayscale opacity-70 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0 md:transition-all md:duration-500"
                                     title={video.title}
                                     loading="lazy"
                                     scrolling="no"
-                                    style={{ transform: 'scale(1.02)' }}
+                                    style={{ border: 'none' }}
                                 ></iframe>
                             </div>
                         ) : (
