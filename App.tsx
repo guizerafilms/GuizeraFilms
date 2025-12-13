@@ -45,7 +45,7 @@ function App() {
       {/* GLOBAL VIDEO MODAL */}
       {selectedVideo && (
         <div 
-            className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-10 backdrop-blur-sm" 
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 backdrop-blur-sm" 
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
             onClick={() => setSelectedVideo(null)}
         >
@@ -53,13 +53,15 @@ function App() {
                 className={`
                     bg-black border border-white/10 relative shadow-2xl shadow-neon/10 
                     ${isVertical 
-                        ? 'w-full h-full md:w-auto md:h-[90vh] aspect-[9/16]' 
+                        // FIXED: Mobile uses w-full and natural aspect ratio, restricted by screen height.
+                        // Desktop uses fixed height.
+                        ? 'w-full max-h-[85vh] aspect-[9/16] md:w-auto md:h-[90vh]' 
                         : 'w-full aspect-video max-w-6xl'
                     }
                 `}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Close Button */}
+                {/* Close Button - Larger touch target for mobile */}
                 <button 
                   className="absolute -top-12 right-0 md:-right-10 text-white hover:text-neon transition-colors p-2" 
                   onClick={() => setSelectedVideo(null)}
@@ -81,12 +83,12 @@ function App() {
                     <h3 className="text-gray-400 font-heading text-xs uppercase tracking-widest">{selectedVideo.title}</h3>
                 </div>
                 
-                <div className="absolute -bottom-10 right-0">
+                <div className="absolute -bottom-12 md:-bottom-10 right-0">
                      <a 
                       href={selectedVideo.url} 
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors bg-black/50 px-3 py-1 rounded-full border border-white/10"
+                      className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors bg-black/50 px-3 py-2 md:py-1 rounded-full border border-white/10"
                     >
                         Abrir Original <ExternalLink size={12} />
                     </a>

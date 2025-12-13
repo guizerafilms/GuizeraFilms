@@ -48,14 +48,10 @@ const Hero: React.FC = () => {
       {/* CONTENT */}
       <div className="relative z-20 container mx-auto px-6 h-full flex flex-col items-center justify-center text-center">
         
-        <h1 className="font-heading font-light text-4xl md:text-6xl lg:text-7xl text-white uppercase tracking-widest md:tracking-mega mb-6 leading-tight animate-slide-up">
-          Visual <br className="md:hidden" />
-          <span className="font-medium">Cinematográfico</span>
+        {/* TEXTO ATUALIZADO E RESPONSIVO */}
+        <h1 className="font-heading font-bold text-2xl md:text-5xl lg:text-6xl text-white uppercase tracking-widest md:tracking-mega mb-8 leading-snug md:leading-tight animate-slide-up max-w-5xl">
+          Transformamos Ideias em Histórias que <span className="text-neon block md:inline">Conectam e Impactam</span> no Primeiro Frame.
         </h1>
-        
-        <p className="text-gray-300 font-sans font-light text-sm md:text-base tracking-widest uppercase mb-12 max-w-xl animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          Estratégia e impacto em cada frame.
-        </p>
         
         <div className="animate-slide-up" style={{ animationDelay: '0.4s' }}>
           <a 
