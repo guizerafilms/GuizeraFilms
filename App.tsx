@@ -53,9 +53,8 @@ function App() {
                 className={`
                     bg-black border border-white/10 relative shadow-2xl shadow-neon/10 
                     ${isVertical 
-                        // FIXED: Mobile uses w-full and natural aspect ratio, restricted by screen height.
-                        // Desktop uses fixed height.
-                        ? 'w-full max-h-[85vh] aspect-[9/16] md:w-auto md:h-[90vh]' 
+                        // REVERTED: Voltando para w-full h-full no mobile
+                        ? 'w-full h-full md:w-auto md:h-[90vh] aspect-[9/16]' 
                         : 'w-full aspect-video max-w-6xl'
                     }
                 `}

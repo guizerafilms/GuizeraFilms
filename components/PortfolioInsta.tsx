@@ -74,12 +74,12 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                 return (
                     <div 
                         key={index} 
-                        // FIXED: Removed h-[350px]. Used aspect-[9/16] to maintain ratio on all devices.
-                        className="relative w-full aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center md:hover:border-neon/30 md:transition-all md:duration-500 cursor-pointer rounded-sm active:opacity-90 active:scale-[0.98] md:active:scale-100"
+                        // REVERTED: Usando h-[350px] fixo novamente ao invés de aspect ratio puro
+                        className="relative w-full h-[350px] md:h-auto md:aspect-[9/16] bg-black border border-white/5 group overflow-hidden flex flex-col items-center justify-center md:hover:border-neon/30 md:transition-all md:duration-500 cursor-pointer rounded-sm active:opacity-90 active:scale-[0.98] md:active:scale-100"
                         onClick={() => handleVideoClick(video, index)}
                     >
                         
-                        {/* Iframe Background - Pointer events none ensures click hits container */}
+                        {/* Iframe Background */}
                         {embedUrl ? (
                             <div className="absolute inset-0 w-full h-full pointer-events-none">
                                 <iframe 
@@ -95,7 +95,7 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                             <div className="absolute inset-0 bg-gray-900 pointer-events-none"></div>
                         )}
 
-                        {/* Overlay - Ensures single tap works by being the top interactive layer */}
+                        {/* Overlay */}
                         <div className="absolute inset-0 z-20 bg-transparent"></div>
 
                         {/* Visual Overlay Elements */}
