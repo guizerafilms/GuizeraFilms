@@ -13,11 +13,9 @@ const Hero = () => {
   };
 
   return (
-    // AJUSTE DE ALTURA: Mudei para h-[65vh] (65% da altura da tela)
-    // Isso deixa o banner mais "estreito", estilo cinema, e mostra mais conteúdo abaixo.
     <section id="hero" className="relative w-full h-[65vh] min-h-[500px] overflow-hidden flex items-center justify-center bg-black border-b border-white/10">
       
-      {/* BACKGROUND VÍDEO */}
+      {/* BACKGROUND VÍDEO (INTACTO) */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-black/50 z-10" />
         
@@ -37,18 +35,22 @@ const Hero = () => {
         
         {/* TÍTULO */}
         <h1 className="font-heading text-white leading-tight">
-          <span className="block text-xl md:text-3xl lg:text-4xl font-light tracking-[0.5em] mb-2 md:mb-4 text-gray-200">
+          {/* Parte 1: VISUAL */}
+          <span className="block text-sm sm:text-xl md:text-3xl lg:text-4xl font-light tracking-[0.5em] mb-2 text-gray-200">
             VISUAL
           </span>
           
-          <span className="block text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-widest break-words w-full max-w-6xl mx-auto">
+          {/* Parte 2: CINEMATOGRÁFICO */}
+          {/* AJUSTE: Reduzi para text-2xl no mobile (celular) para garantir que caiba. 
+              Escala: Celular(2xl) -> Tablet(4xl) -> Laptop(6xl) -> Tela Grande(7xl) */}
+          <span className="block text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-widest w-full max-w-6xl mx-auto break-words">
             CINEMATOGRÁFICO
           </span>
         </h1>
 
         {/* SUBTÍTULO */}
-        <div className="mt-6 md:mt-8 max-w-2xl mx-auto">
-          <p className="text-gray-300 text-[10px] md:text-sm font-sans tracking-[0.2em] uppercase leading-relaxed border-t border-b border-white/20 py-4 px-4">
+        <div className="mt-6 max-w-2xl mx-auto">
+          <p className="text-gray-300 text-[10px] md:text-sm font-sans tracking-[0.2em] uppercase leading-relaxed border-t border-b border-white/20 py-3 px-4">
             Estratégia visual que constrói <span className="text-neon font-bold">autoridade</span> e valor para sua marca.
           </p>
         </div>
@@ -56,16 +58,21 @@ const Hero = () => {
         {/* BOTÃO */}
         <button 
           onClick={scrollToPortfolio}
-          className="mt-8 md:mt-10 px-8 py-3 border border-white/30 hover:border-neon hover:bg-neon/10 text-white text-xs font-bold uppercase tracking-widest transition-all duration-300"
+          className="mt-8 px-6 py-2 md:px-8 md:py-3 border border-white/30 hover:border-neon hover:bg-neon/10 text-white text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all duration-300"
         >
           Ver Portfólio
         </button>
-
-        {/* SETA SCROLL */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce opacity-50 cursor-pointer" onClick={scrollToPortfolio}>
-          <ChevronDown className="text-white" size={24} />
-        </div>
       </div>
+
+      {/* SETA SCROLL (Corrigida e Centralizada) */}
+      {/* Agora ela é filha direta da Section, garantindo o centro absoluto */}
+      <div 
+        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 animate-bounce opacity-50 z-30 cursor-pointer" 
+        onClick={scrollToPortfolio}
+      >
+        <ChevronDown className="text-white" size={24} />
+      </div>
+
     </section>
   );
 };
