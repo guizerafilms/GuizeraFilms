@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -17,16 +17,16 @@ function App() {
 
   const handleCloseVideo = () => setSelectedVideo(null);
 
-  // Detecta se é vertical
+  // Detecta se é vídeo vertical (Reels/Stories)
   const isVertical = selectedVideo?.id?.toString().startsWith('insta-') || 
                      selectedVideo?.category === 'REELS' || 
                      selectedVideo?.category === 'STORIES';
 
-  // ID do Drive
+  // Pega o ID do Drive
   const driveId = selectedVideo ? extractDriveId(selectedVideo.url) : null;
   
   // URL DE STREAM DIRETO (O Segredo para Mobile)
-  // Em vez de 'preview', usamos a API de download para rodar nativo
+  // Isso faz o navegador tratar o arquivo como um vídeo nativo, ignorando o player ruim do Drive
   const directVideoUrl = driveId ? `https://drive.google.com/uc?export=download&id=${driveId}` : '';
 
   return (
@@ -34,17 +34,18 @@ function App() {
       <Header />
       <Hero />
       
-      {/* 1. Portfólio */}
+      {/* 1. SEÇÃO DE VÍDEOS (Portfólio) */}
       <PortfolioDrive isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
       <PortfolioInsta isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
       
-      {/* 2. Nossa Visão (Sobre) */}
+      {/* 2. NOSSA VISÃO (About) */}
       <About />
 
-      {/* 3. Soluções 360 (Services) - ORDEM CORRIGIDA: Abaixo de Visão, Acima de Contato */}
+      {/* 3. SOLUÇÕES 360 (Services) - ORDEM CORRIGIDA */}
+      {/* Agora está DEPOIS de "Nossa Visão" e ANTES de "Contato" */}
       <Services />
       
-      {/* 4. Vamos criar algo épico (Contato) */}
+      {/* 4. CONTATO (Vamos criar algo épico) */}
       <Contact />
       
       <Footer />
@@ -78,14 +79,14 @@ function App() {
                        - Usa a tag <video> em vez de <iframe>.
                        - Carrega o arquivo direto.
                        - playsInline: OBRIGATÓRIO para não abrir em tela cheia nativa do iOS e quebrar o layout.
+                       - object-cover: Garante que o vídeo preencha a tela sem achatar.
                     */
                     <video 
                         src={directVideoUrl}
-                        className="w-full h-full object-cover" // COBRE A TELA TODA (SEM BARRAS PRETAS)
+                        className="w-full h-full object-cover" 
                         controls={true} // Controles nativos do celular (bonitos e funcionais)
                         autoPlay={true} // Tenta tocar sozinho
                         playsInline={true} // Importante para iOS
-                        // loop // Opcional: se quiser que fique repetindo igual TikTok, descomente essa linha
                     >
                         Seu navegador não suporta este vídeo.
                     </video>
