@@ -1,116 +1,83 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import About from './components/About';
+import Services from './components/Services';
 import PortfolioDrive from './components/PortfolioDrive';
 import PortfolioInsta from './components/PortfolioInsta';
-import Services from './components/Services';
+import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import { PortfolioVideo } from './types';
-import { X, ExternalLink } from 'lucide-react';
 import { getEmbedUrl } from './utils/urlHelpers';
+import { PortfolioVideo } from './types';
+import { X } from 'lucide-react';
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  // Estado para controlar qual vídeo está aberto
   const [selectedVideo, setSelectedVideo] = useState<PortfolioVideo | null>(null);
+  
+  // Estado simples de admin (mantendo sua lógica original se houver)
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('admin') === 'true') {
-      setIsAdmin(true);
-    }
-  }, []);
+  // Função para fechar o modal
+  const handleCloseVideo = () => setSelectedVideo(null);
 
-  // History API Handler
-  useEffect(() => {
-    const handlePopState = (event: PopStateEvent) => {
-      setSelectedVideo(null);
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
-  const handleOpenVideo = (video: PortfolioVideo) => {
-    setSelectedVideo(video);
-    window.history.pushState({ modalOpen: true }, '', window.location.pathname);
-  };
-
-  const handleCloseVideo = () => {
-    if (selectedVideo) {
-      window.history.back();
-    }
-  };
-
-  const isVertical = selectedVideo?.id.startsWith('insta');
+  // Lógica Inteligente: Detecta se o vídeo é vertical
+  // Se o ID começar com "insta-" (definido no PortfolioInsta) ou a categoria for típica de vertical
+  const isVertical = selectedVideo?.id?.toString().startsWith('insta-') || 
+                     selectedVideo?.category === 'REELS' || 
+                     selectedVideo?.category === 'STORIES';
 
   return (
-    <div className="bg-black min-h-screen text-white font-sans selection:bg-neon selection:text-white">
+    <div className="bg-black min-h-screen font-sans">
       <Header />
-      <main>
-        <Hero />
-        <PortfolioDrive isAdmin={isAdmin} onVideoSelect={handleOpenVideo} />
-        <PortfolioInsta isAdmin={isAdmin} onVideoSelect={handleOpenVideo} />
-        <About />
-        <Services />
-        <Contact />
-      </main>
+      <Hero />
+      <Services />
+      
+      {/* Seção Horizontal */}
+      <PortfolioDrive isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
+      
+      {/* Seção Vertical (Reels/TikTok) */}
+      <PortfolioInsta isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
+      
+      <About />
+      <Contact />
       <Footer />
-      {isAdmin && (
-        <div className="fixed bottom-4 right-4 bg-neon text-white text-[10px] px-3 py-1 uppercase tracking-widest z-50 opacity-70 pointer-events-none shadow-lg font-bold">
-          Admin Mode
-        </div>
-      )}
 
-      {/* GLOBAL VIDEO MODAL */}
+      {/* --- GLOBAL VIDEO MODAL --- */}
       {selectedVideo && (
         <div 
-            className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-10 backdrop-blur-md" 
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
-            onClick={handleCloseVideo}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 md:p-10"
+            onClick={handleCloseVideo} // Clicar fora fecha
         >
+            
+            {/* Container do Player */}
             <div 
-                // DIRETRIZ 2: Modal simplificado.
-                // O container mantém a proporção rígida para evitar "pulos" de layout.
-                className={`
-                    relative bg-black shadow-2xl shadow-neon/10 flex items-center justify-center overflow-hidden
-                    ${isVertical 
-                        // Vertical: Mobile = aspect-[9/16] e largura total (limitada pela altura da viewport)
-                        ? 'aspect-[9/16] h-auto w-full max-h-[85vh] md:h-[90vh] md:w-auto' 
-                        : 'aspect-video w-full max-w-6xl'
-                    }
-                `}
-                onClick={(e) => e.stopPropagation()}
+                className={`relative bg-black overflow-hidden shadow-2xl border border-white/10 flex flex-col justify-center ${
+                    isVertical 
+                    ? 'w-full max-w-[50vh] aspect-[9/16] max-h-[85vh] rounded-xl' // VERTICAL: Trava a proporção de celular
+                    : 'w-full max-w-6xl aspect-video rounded-lg' // HORIZONTAL: Tela de cinema
+                }`}
+                onClick={(e) => e.stopPropagation()} // Clicar dentro NÃO fecha
             >
-                {/* Close Button */}
+                
+                {/* Botão Fechar (Sempre visível acima do iframe) */}
                 <button 
-                  className="absolute top-4 right-4 z-[120] bg-black/60 rounded-full p-2 text-white hover:text-neon transition-colors md:fixed md:top-10 md:right-10 md:bg-transparent" 
-                  onClick={handleCloseVideo}
+                    className="absolute top-4 right-4 z-[120] bg-black/60 hover:bg-neon text-white hover:text-black rounded-full p-2 transition-all duration-300"
+                    onClick={handleCloseVideo}
                 >
-                    <X size={24} className="md:w-10 md:h-10" />
+                    <X size={24} />
                 </button>
-                
-                {/* IFRAME: Renderização Direta (Sem estados intermediários) */}
-                <iframe
+
+                {/* IFRAME: Renderização Direta */}
+                <iframe 
                     src={getEmbedUrl(selectedVideo.platform, selectedVideo.embedId)}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
+                    className="w-full h-full"
                     title={selectedVideo.title}
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowFullScreen
+                    style={{ border: 0 }}
                 ></iframe>
-                
-                {/* Desktop Extras */}
-                <div className="hidden md:block absolute -bottom-12 right-0">
-                     <a 
-                      href={selectedVideo.url} 
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-500 hover:text-white text-xs uppercase tracking-widest transition-colors bg-black/50 px-3 py-1 rounded-full border border-white/10"
-                    >
-                        Abrir Original <ExternalLink size={12} />
-                    </a>
-                </div>
+
             </div>
         </div>
       )}
