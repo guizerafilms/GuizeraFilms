@@ -87,7 +87,7 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-90 pointer-events-none"></div>
                         
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                             <div className="w-10 h-10 md:w-12 md:h-12 bg-neon/80 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(34,220,195,0.4)] backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+                             <div className="w-10 h-10 md:w-12 md:h-12 bg-neon/80 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(34,220,195,0.4)] backdrop-blur-sm group-hover:scale-100 transition-transform duration-300">
                                 <Play size={20} className="text-black fill-current ml-1" />
                              </div>
                         </div>

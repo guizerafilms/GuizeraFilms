@@ -28,11 +28,8 @@ function App() {
       <PortfolioInsta isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
       
       <About />
-
       <Services />
-      
       <Contact />
-      
       <Footer />
 
       {selectedVideo && (
@@ -67,9 +64,7 @@ function App() {
                     </video>
                 ) : (
                     <iframe 
-                        // Nota: Se o vídeo for do Youtube (do PortfolioDrive), isso tentará abrir como Drive e falhará
-                        // Idealmente, a lógica aqui deveria checar selectedVideo.platform
-                        src={getEmbedUrl('drive', selectedVideo.embedId)}
+                        src={getEmbedUrl(selectedVideo.platform, selectedVideo.embedId)}
                         className="w-full h-full"
                         title={selectedVideo.title}
                         allow="autoplay; encrypted-media; picture-in-picture"
