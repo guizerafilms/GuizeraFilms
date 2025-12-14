@@ -1,10 +1,9 @@
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
 
-const Hero: React.FC = () => {
-  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
-    e.preventDefault();
-    const targetElement = document.getElementById(targetId);
+const Hero = () => {
+  const scrollToPortfolio = () => {
+    const targetElement = document.getElementById('portfolio');
     if (targetElement) {
       const headerOffset = 80;
       const elementPosition = targetElement.getBoundingClientRect().top;
@@ -14,62 +13,59 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section 
-      id="hero"
-      className="relative w-full overflow-hidden bg-black mt-20"
-      style={{ height: '600px' }}
-    >
-      
-      {/* BACKGROUND VIDEO */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* 
-           Wrapper centralizado para simular object-fit: cover em iframes.
-           Definimos dimensões grandes o suficiente para garantir o preenchimento sem barras pretas.
-        */}
-        <div 
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-            style={{ width: '300%', height: '300%' }} // Garante cobertura em qualquer aspect ratio
-        >
-          <iframe 
-            className="w-full h-full object-cover opacity-80"
-            src="https://www.youtube.com/embed/m3e5y3aTk3o?autoplay=1&mute=1&controls=0&loop=1&playlist=m3e5y3aTk3o&rel=0&showinfo=0&iv_load_policy=3&modestbranding=1&playsinline=1&enablejsapi=1&origin=https://guizerafilms.com" 
-            title="Guizera Films Background"
-            frameBorder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowFullScreen
-            style={{ pointerEvents: 'none' }}
-          ></iframe>
+    <section id="hero" className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+      {/* BACKGROUND: YouTube Video (Iframe) */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-black/50 z-10" /> {/* Camada escura para o texto aparecer */}
+        
+        {/* Truque para deixar o vídeo do YouTube em tela cheia como background */}
+        <div className="absolute top-1/2 left-1/2 w-[300%] h-[300%] -translate-x-1/2 -translate-y-1/2">
+            <iframe 
+              className="w-full h-full"
+              src="https://www.youtube.com/embed/m3e5y3aTk3o?autoplay=1&mute=1&controls=0&loop=1&playlist=m3e5y3aTk3o&playsinline=1&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1" 
+              title="Hero Background"
+              allow="autoplay; encrypted-media" 
+              allowFullScreen
+              style={{ pointerEvents: 'none', border: 0 }}
+            ></iframe>
         </div>
       </div>
 
-      {/* OVERLAY */}
-      <div className="absolute inset-0 bg-black/60 z-10"></div>
-
-      {/* CONTENT */}
-      <div className="relative z-20 container mx-auto px-6 h-full flex flex-col items-center justify-center text-center">
+      {/* CONTEÚDO */}
+      <div className="relative z-20 w-full px-4 text-center flex flex-col items-center justify-center">
         
-        <h1 className="font-heading font-light text-4xl md:text-6xl lg:text-7xl text-white uppercase tracking-widest md:tracking-mega mb-6 leading-tight animate-slide-up">
-          Visual <br className="md:hidden" />
-          <span className="font-medium">Cinematográfico</span>
+        {/* TÍTULO ORIGINAL (Com ajuste de tamanho para mobile) */}
+        <h1 className="font-heading text-white leading-tight">
+          {/* Parte 1: VISUAL */}
+          <span className="block text-xl md:text-3xl lg:text-4xl font-light tracking-[0.5em] mb-2 md:mb-4 text-gray-200">
+            VISUAL
+          </span>
+          
+          {/* Parte 2: CINEMATOGRÁFICO */}
+          {/* A classe 'break-words' e os tamanhos (text-3xl até text-7xl) garantem que ele caiba no celular sem perder o estilo */}
+          <span className="block text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-widest break-words w-full max-w-6xl mx-auto">
+            CINEMATOGRÁFICO
+          </span>
         </h1>
-        
-        <p className="text-gray-300 font-sans font-light text-sm md:text-base tracking-widest uppercase mb-12 max-w-xl animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          Estratégia e impacto em cada frame.
-        </p>
-        
-        <div className="animate-slide-up" style={{ animationDelay: '0.4s' }}>
-          <a 
-            href="#portfolio"
-            onClick={(e) => handleScroll(e, 'portfolio')}
-            className="inline-block border border-white/30 text-white font-heading font-medium text-xs px-10 py-4 uppercase tracking-widest hover:bg-white hover:text-black hover:border-white transition-all duration-500"
-          >
-            Ver Portfólio
-          </a>
+
+        {/* SUBTÍTULO (Nova Copy de Vendas) */}
+        <div className="mt-8 max-w-2xl mx-auto">
+          <p className="text-gray-300 text-[10px] md:text-sm font-sans tracking-[0.2em] uppercase leading-relaxed border-t border-b border-white/20 py-4 px-4">
+            Estratégia visual que constrói <span className="text-neon font-bold">autoridade</span> e valor para sua marca.
+          </p>
         </div>
 
-        {/* SCROLL INDICATOR */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce opacity-70 hover:opacity-100 transition-opacity cursor-pointer" onClick={(e) => handleScroll(e as any, 'portfolio')}>
-            <ChevronDown className="text-white w-8 h-8" />
+        {/* BOTÃO (Estilo Original) */}
+        <button 
+          onClick={scrollToPortfolio}
+          className="mt-12 px-8 py-3 border border-white/30 hover:border-neon hover:bg-neon/10 text-white text-xs font-bold uppercase tracking-widest transition-all duration-300"
+        >
+          Ver Portfólio
+        </button>
+
+        {/* SETA SCROLL */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 cursor-pointer" onClick={scrollToPortfolio}>
+          <ChevronDown className="text-white" size={32} />
         </div>
       </div>
     </section>
