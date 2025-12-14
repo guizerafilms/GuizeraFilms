@@ -6,7 +6,7 @@ export interface PortfolioVideo {
   title: string;
   category: string;
   url: string; // URL original completa
-  platform: 'youtube' | 'drive';
+  platform: 'youtube' | 'drive' | 'cloudinary';
 }
 
 export interface InstaVideo {
