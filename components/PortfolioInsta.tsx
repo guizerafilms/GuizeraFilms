@@ -65,8 +65,11 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
             </p>
         </div>
 
-        {/* Vertical Grid - Reestruturado conforme diretriz técnica */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+        {/* GRID OTIMIZADO:
+            - Usamos 'gap-4' para espaçamento consistente.
+            - A Grid define a largura, o 'aspect-ratio' no filho define a altura.
+        */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {verticalVideos.map((video, index) => {
                 const driveId = extractDriveId(video.url);
                 const embedUrl = driveId ? getEmbedUrl('drive', driveId) : '';
@@ -74,47 +77,51 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                 return (
                     <div 
                         key={index} 
-                        // DIRETRIZ 1: Container com aspect-ratio: 9/16, relative e overflow-hidden.
-                        // Removemos flex/justify para evitar comportamento inesperado de alinhamento.
-                        className="relative w-full aspect-[9/16] bg-black overflow-hidden group cursor-pointer border border-white/5 md:hover:border-neon/30 transition-all duration-300"
+                        // CORREÇÃO VISUAL:
+                        // 'aspect-[9/16]' força o retângulo vertical perfeito.
+                        // 'relative' e 'overflow-hidden' garantem que nada saia da caixa.
+                        // Removemos bordas complexas que podiam afetar o sizing.
+                        className="relative w-full aspect-[9/16] bg-black rounded-lg overflow-hidden group cursor-pointer border border-white/10 shadow-lg hover:border-neon/50 transition-all duration-300"
                         onClick={() => handleVideoClick(video, index)}
                     >
                         
-                        {/* Iframe Background - DIRETRIZ 1: Absolute, top 0, left 0, w-full, h-full, object-cover */}
+                        {/* IFRAME CORRIGIDO:
+                            - Removemos 'object-cover' (não funciona em iframe).
+                            - Usamos 'absolute inset-0 w-full h-full' para forçar o preenchimento total.
+                            - 'pointer-events-none' é CRUCIAL: impede que o usuário clique no Play do Google Drive dentro da miniatura.
+                              O clique vai para a DIV pai, que abre o seu Modal personalizado.
+                        */}
                         {embedUrl ? (
                             <iframe 
                                 src={embedUrl}
-                                // pointer-events-none é CRUCIAL aqui:
-                                // Impede que o clique seja capturado pelo iframe (play/pause interno).
-                                // O clique passa para a DIV pai, que abre o Modal.
-                                className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none grayscale-0 md:grayscale opacity-80 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0 transition-all duration-500"
+                                className="absolute inset-0 w-full h-full pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity duration-300"
                                 title={video.title}
                                 loading="lazy"
                                 scrolling="no"
-                                style={{ border: 'none' }}
+                                style={{ border: 'none' }} // Garante zero bordas no iframe
                             ></iframe>
                         ) : (
-                            <div className="absolute inset-0 bg-gray-900"></div>
+                            <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
+                                <Smartphone className="text-gray-700" />
+                            </div>
                         )}
 
-                        {/* Visual Overlay (Gradiente para texto) */}
-                        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none"></div>
+                        {/* Overlay Escuro para o Texto (Melhora leitura) */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-90 pointer-events-none"></div>
                         
-                        {/* Info Content */}
-                        <div className="absolute bottom-3 left-0 w-full px-2 text-center z-20 pointer-events-none">
-                             <div className="flex justify-center mb-1">
-                                <Smartphone className="text-neon w-4 h-4 md:w-6 md:h-6" />
+                        {/* Botão de Play Centralizado (Visual Only) */}
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                             <div className="w-10 h-10 md:w-12 md:h-12 bg-neon/80 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(34,220,195,0.4)] backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+                                <Play size={20} className="text-black fill-current ml-1" />
                              </div>
-                             <p className="text-neon text-[8px] font-bold uppercase tracking-widest mb-1 truncate px-1">{video.category}</p>
-                             <h3 className="text-white text-[9px] md:text-[10px] font-heading uppercase tracking-wide leading-tight line-clamp-2 px-1">{video.title}</h3>
                         </div>
 
-                        {/* Play Button Overlay - Centralizado */}
-                        <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-                            <div className="bg-black/40 backdrop-blur-sm border border-white/20 p-3 rounded-full">
-                                <Play size={20} fill="currentColor" className="text-white ml-1" />
-                            </div>
+                        {/* Informações do Vídeo */}
+                        <div className="absolute bottom-0 left-0 w-full p-4 z-30 pointer-events-none text-left">
+                             <p className="text-neon text-[10px] font-bold uppercase tracking-widest mb-1">{video.category}</p>
+                             <h3 className="text-white text-xs md:text-sm font-heading uppercase tracking-wide leading-tight line-clamp-2">{video.title}</h3>
                         </div>
+
                     </div>
                 );
             })}
