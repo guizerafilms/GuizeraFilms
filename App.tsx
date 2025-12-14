@@ -22,10 +22,9 @@ function App() {
     }
   }, []);
 
-  // History API Handler: Fecha o modal ao clicar no botão Voltar do navegador
+  // History API Handler
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
-      // Se o usuário clicar em voltar, o modal fecha
       setSelectedVideo(null);
     };
 
@@ -33,18 +32,13 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Wrapper para abrir vídeo e adicionar estado no histórico
   const handleOpenVideo = (video: PortfolioVideo) => {
     setSelectedVideo(video);
-    // Adiciona uma entrada no histórico para que o botão "Voltar" funcione
     window.history.pushState({ modalOpen: true }, '', window.location.pathname);
   };
 
-  // Wrapper para fechar vídeo (chama history.back para manter consistência)
   const handleCloseVideo = () => {
     if (selectedVideo) {
-      // Ao invés de setar null direto, voltamos no histórico.
-      // O listener 'popstate' vai capturar isso e fechar o modal.
       window.history.back();
     }
   };
@@ -72,51 +66,42 @@ function App() {
       {/* GLOBAL VIDEO MODAL */}
       {selectedVideo && (
         <div 
-            className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-10 backdrop-blur-sm" 
+            className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-10 backdrop-blur-md" 
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
             onClick={handleCloseVideo}
         >
             <div 
+                // DIRETRIZ 2: Modal simplificado.
+                // O container mantém a proporção rígida para evitar "pulos" de layout.
                 className={`
-                    bg-black border-none md:border md:border-white/10 relative shadow-2xl shadow-neon/10 flex items-center justify-center
+                    relative bg-black shadow-2xl shadow-neon/10 flex items-center justify-center overflow-hidden
                     ${isVertical 
-                        // CSS FIX CRÍTICO PARA MOBILE:
-                        // 1. aspect-[9/16] e max-h-[85vh]: Garante formato vertical correto.
-                        // 2. w-full: Tenta preencher a largura disponível dentro do limite de altura.
-                        ? 'w-full aspect-[9/16] max-h-[85vh] md:w-auto md:h-[90vh]' 
-                        : 'w-full aspect-video max-w-6xl'
+                        // Vertical: Mobile = aspect-[9/16] e largura total (limitada pela altura da viewport)
+                        ? 'aspect-[9/16] h-auto w-full max-h-[85vh] md:h-[90vh] md:w-auto' 
+                        : 'aspect-video w-full max-w-6xl'
                     }
                 `}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* 
-                  Close Button
-                  Mobile: Fixed top-right, Z-index alto.
-                */}
+                {/* Close Button */}
                 <button 
-                  className="fixed top-4 right-4 z-[120] bg-black/60 rounded-full p-2 md:absolute md:-top-10 md:-right-10 md:bg-transparent md:p-2 text-white hover:text-neon transition-colors" 
+                  className="absolute top-4 right-4 z-[120] bg-black/60 rounded-full p-2 text-white hover:text-neon transition-colors md:fixed md:top-10 md:right-10 md:bg-transparent" 
                   onClick={handleCloseVideo}
                 >
-                    <X size={24} className="md:w-8 md:h-8" />
+                    <X size={24} className="md:w-10 md:h-10" />
                 </button>
                 
-                {/* IFRAME - Lógica unificada de Embed */}
-                {/* allow="autoplay" é crucial aqui */}
+                {/* IFRAME: Renderização Direta (Sem estados intermediários) */}
                 <iframe
                     src={getEmbedUrl(selectedVideo.platform, selectedVideo.embedId)}
-                    className="w-full h-full"
+                    className="absolute inset-0 w-full h-full object-cover"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                     title={selectedVideo.title}
                 ></iframe>
-
-                {/* Footer Info (Desktop Only) */}
-                <div className="absolute -bottom-8 left-0 hidden md:block">
-                    <h3 className="text-gray-400 font-heading text-xs uppercase tracking-widest">{selectedVideo.title}</h3>
-                </div>
                 
-                {/* External Link */}
-                <div className="hidden md:block absolute -bottom-10 right-0">
+                {/* Desktop Extras */}
+                <div className="hidden md:block absolute -bottom-12 right-0">
                      <a 
                       href={selectedVideo.url} 
                       target="_blank"

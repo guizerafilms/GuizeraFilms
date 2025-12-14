@@ -65,7 +65,7 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
             </p>
         </div>
 
-        {/* Vertical Grid */}
+        {/* Vertical Grid - Reestruturado conforme diretriz técnica */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
             {verticalVideos.map((video, index) => {
                 const driveId = extractDriveId(video.url);
@@ -74,41 +74,34 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                 return (
                     <div 
                         key={index} 
-                        // CSS FIX DEFINITIVO:
-                        // 1. aspect-[9/16]: Define a proporção física do card.
-                        // 2. relative block: Removemos flex/justify para evitar espaços vazios.
-                        // 3. w-full: Garante que o card ocupe a coluna do grid.
-                        className="relative w-full aspect-[9/16] bg-black border border-white/5 group overflow-hidden cursor-pointer rounded-sm active:opacity-90 active:scale-[0.98] md:active:scale-100 md:hover:border-neon/30 md:transition-all md:duration-500"
+                        // DIRETRIZ 1: Container com aspect-ratio: 9/16, relative e overflow-hidden.
+                        // Removemos flex/justify para evitar comportamento inesperado de alinhamento.
+                        className="relative w-full aspect-[9/16] bg-black overflow-hidden group cursor-pointer border border-white/5 md:hover:border-neon/30 transition-all duration-300"
                         onClick={() => handleVideoClick(video, index)}
                     >
                         
-                        {/* Iframe Background */}
+                        {/* Iframe Background - DIRETRIZ 1: Absolute, top 0, left 0, w-full, h-full, object-cover */}
                         {embedUrl ? (
-                            <div className="absolute inset-0 w-full h-full pointer-events-none bg-black">
-                                <iframe 
-                                    src={embedUrl}
-                                    // CSS FIX: 
-                                    // absolute inset-0 w-full h-full: Força o iframe a ocupar CADA pixel do container pai.
-                                    // object-cover: Tenta ajustar o conteúdo (depende do suporte do browser para iframe, mas ajuda).
-                                    className="absolute inset-0 w-full h-full object-cover grayscale-0 md:grayscale opacity-70 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0 md:transition-all md:duration-500"
-                                    title={video.title}
-                                    loading="lazy"
-                                    scrolling="no"
-                                    style={{ border: 'none' }}
-                                ></iframe>
-                            </div>
+                            <iframe 
+                                src={embedUrl}
+                                // pointer-events-none é CRUCIAL aqui:
+                                // Impede que o clique seja capturado pelo iframe (play/pause interno).
+                                // O clique passa para a DIV pai, que abre o Modal.
+                                className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none grayscale-0 md:grayscale opacity-80 md:opacity-60 md:group-hover:opacity-100 md:group-hover:grayscale-0 transition-all duration-500"
+                                title={video.title}
+                                loading="lazy"
+                                scrolling="no"
+                                style={{ border: 'none' }}
+                            ></iframe>
                         ) : (
-                            <div className="absolute inset-0 bg-gray-900 pointer-events-none"></div>
+                            <div className="absolute inset-0 bg-gray-900"></div>
                         )}
 
-                        {/* Overlay */}
-                        <div className="absolute inset-0 z-20 bg-transparent"></div>
-
-                        {/* Visual Overlay Elements */}
-                        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 md:transition-opacity md:duration-300"></div>
+                        {/* Visual Overlay (Gradiente para texto) */}
+                        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none"></div>
                         
                         {/* Info Content */}
-                        <div className="absolute bottom-3 left-0 w-full px-2 text-center z-30 pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 md:transition-opacity md:duration-300">
+                        <div className="absolute bottom-3 left-0 w-full px-2 text-center z-20 pointer-events-none">
                              <div className="flex justify-center mb-1">
                                 <Smartphone className="text-neon w-4 h-4 md:w-6 md:h-6" />
                              </div>
@@ -116,17 +109,12 @@ const PortfolioInsta: React.FC<PortfolioInstaProps> = ({ isAdmin, onVideoSelect 
                              <h3 className="text-white text-[9px] md:text-[10px] font-heading uppercase tracking-wide leading-tight line-clamp-2 px-1">{video.title}</h3>
                         </div>
 
-                        {/* Play Button */}
-                        <div 
-                            className="absolute inset-0 z-30 flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 md:transition-opacity md:duration-300 pointer-events-none"
-                        >
-                            <div className="border border-white/40 bg-black/20 backdrop-blur-[2px] text-white p-3 rounded-full shadow-sm md:shadow-lg md:group-hover:scale-110 md:transition-transform md:duration-300">
-                                <Play size={20} fill="currentColor" className="ml-1" />
+                        {/* Play Button Overlay - Centralizado */}
+                        <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="bg-black/40 backdrop-blur-sm border border-white/20 p-3 rounded-full">
+                                <Play size={20} fill="currentColor" className="text-white ml-1" />
                             </div>
                         </div>
-
-                        {/* Scanline Effect - Desktop Only */}
-                        <div className="hidden md:block absolute inset-0 bg-white/5 h-[1px] w-full animate-float opacity-0 group-hover:opacity-20 pointer-events-none"></div>
                     </div>
                 );
             })}
