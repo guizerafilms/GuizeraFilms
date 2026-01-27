@@ -7,6 +7,7 @@ import PortfolioInsta from './components/PortfolioInsta';
 import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import BackToTop from './components/BackToTop';
 import { getEmbedUrl } from './utils/urlHelpers';
 import { PortfolioVideo } from './types';
 import { X } from 'lucide-react';
@@ -31,6 +32,8 @@ function App() {
       <Services />
       <Contact />
       <Footer />
+      
+      <BackToTop />
 
       {selectedVideo && (
         <div 

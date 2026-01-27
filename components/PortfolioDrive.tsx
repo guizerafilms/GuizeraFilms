@@ -76,7 +76,7 @@ const PortfolioDrive: React.FC<PortfolioDriveProps> = ({ isAdmin, onVideoSelect 
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-white/10 pb-6">
           <div className="max-w-2xl">
             <h2 className="font-heading font-light text-4xl md:text-5xl text-white uppercase tracking-tight mb-4">
-              Portfólio <span className="font-bold text-neon">Select</span>
+              Trabalhos em <span className="font-bold text-neon">Destaque</span>
             </h2>
             <div className="h-1 w-20 bg-neon rounded-full mb-4"></div>
             <p className="text-gray-400 text-sm font-sans font-light tracking-wide uppercase">
