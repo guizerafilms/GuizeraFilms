@@ -15,12 +15,26 @@ const Footer: React.FC = () => {
         </div>
 
         <p className="text-gray-600 text-[10px] uppercase tracking-widest text-center">
-          &copy; 2025 Guizera Films. Todos os direitos reservados.
+          &copy; 2026 GUIZERA FILMS. TODOS OS DIREITOS RESERVADOS.
         </p>
         
         <div className="flex gap-8">
-            <a href="#" className="text-gray-600 hover:text-white text-[10px] uppercase tracking-widest transition-colors">Instagram</a>
-            <a href="#" className="text-gray-600 hover:text-white text-[10px] uppercase tracking-widest transition-colors">Youtube</a>
+            <a 
+              href="https://www.instagram.com/guizerafilms/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-gray-600 hover:text-white text-[10px] uppercase tracking-widest transition-colors"
+            >
+              Instagram
+            </a>
+            <a 
+              href="https://www.youtube.com/@guizerafilms" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-gray-600 hover:text-white text-[10px] uppercase tracking-widest transition-colors"
+            >
+              Youtube
+            </a>
         </div>
       </div>
     </footer>
