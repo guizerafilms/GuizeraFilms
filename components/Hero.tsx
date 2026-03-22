@@ -51,7 +51,7 @@ const Hero = () => {
         {/* SUBTÍTULO */}
         <div className="mt-6 max-w-2xl mx-auto">
           <p className="text-gray-300 text-[10px] md:text-sm font-sans tracking-[0.2em] uppercase leading-relaxed border-t border-b border-white/20 py-3 px-4">
-            Estratégia visual que constrói <span className="text-neon font-bold">autoridade</span> e valor para sua marca.
+            Contamos histórias que vendem, emocionam e <span className="text-neon font-bold">marcam</span>
           </p>
         </div>
 

@@ -4,12 +4,12 @@ import { ServiceItem } from '../types';
 
 const Services: React.FC = () => {
   const services: ServiceItem[] = [
-    { title: 'Institucional', description: 'Vídeos corporativos que fortalecem autoridade.', icon: <Briefcase size={24} /> },
-    { title: 'Marketing Político', description: 'Campanhas estratégicas e gestão de imagem.', icon: <Users size={24} /> },
-    { title: 'Eventos', description: 'Cobertura dinâmica de shows e eventos sociais.', icon: <Video size={24} /> },
-    { title: 'Conteúdo Digital', description: 'Reels e vídeos verticais de alto impacto.', icon: <Share2 size={24} /> },
-    { title: 'Pós-Produção', description: 'Edição, color grading e sound design.', icon: <MonitorPlay size={24} /> },
-    { title: 'Publicidade', description: 'Comerciais com estética broadcast.', icon: <Mic2 size={24} /> },
+    { title: 'Institucional', description: 'Construa credibilidade e conquiste clientes.', icon: <Briefcase size={24} /> },
+    { title: 'Marketing Político', description: 'Conecte com eleitores e conquiste votos.', icon: <Users size={24} /> },
+    { title: 'Eventos', description: 'Eternize momentos que ficam para sempre.', icon: <Video size={24} /> },
+    { title: 'Conteúdo Digital', description: 'Viralização e engajamento nas redes sociais.', icon: <Share2 size={24} /> },
+    { title: 'Pós-Produção', description: 'Qualidade profissional em cada frame.', icon: <MonitorPlay size={24} /> },
+    { title: 'Publicidade', description: 'Vídeos que vendem e impulsionam seu negócio.', icon: <Mic2 size={24} /> },
   ];
 
   return (

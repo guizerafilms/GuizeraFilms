@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import Services from './components/Services';
 import PortfolioDrive from './components/PortfolioDrive';
 import PortfolioInsta from './components/PortfolioInsta';
+import Testimonials from './components/Testimonials';
 import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -27,6 +28,8 @@ function App() {
       
       <PortfolioDrive isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
       <PortfolioInsta isAdmin={isAdmin} onVideoSelect={setSelectedVideo} />
+      
+      <Testimonials />
       
       <About />
       <Services />

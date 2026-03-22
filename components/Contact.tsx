@@ -12,7 +12,7 @@ const Contact: React.FC = () => {
         </h2>
         
         <p className="text-gray-400 font-light text-sm md:text-base max-w-2xl mx-auto mb-12 tracking-wide">
-            Sua marca merece um visual cinematográfico. Entre em contato e solicite um orçamento personalizado.
+            Quer vídeos que geram resultados e são lembrados? Vamos conversar sobre seu projeto e criar algo que faz a diferença.
         </p>
 
         <a 

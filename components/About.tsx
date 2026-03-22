@@ -46,10 +46,10 @@ const About: React.FC = () => {
             {/* Texto Aumentado para text-lg */}
             <div className="space-y-8 text-gray-400 font-sans font-light text-base md:text-lg leading-relaxed tracking-wide text-justify max-w-xl">
                 <p>
-                A <strong className="text-white">Guizera Films</strong> opera na intersecção entre a arte cinematográfica e a estratégia digital. Não fazemos apenas vídeos; construímos ativos visuais que elevam a percepção de valor da sua marca.
+                Do interior da Bahia para o Brasil, a <strong className="text-white">Guizera Films</strong> nasceu da paixão por transformar momentos em memórias cinematográficas. Cada vídeo que produzimos carrega atenção aos detalhes, qualidade técnica e, acima de tudo, a emoção de contar histórias reais.
                 </p>
                 <p>
-                Com equipamentos de ponta e um olhar treinado para a narrativa, entregamos resultados que superam o convencional. Seja para o mercado corporativo, político ou eventos sociais, nossa assinatura é a sofisticação.
+                Seja documentando seu casamento, construindo autoridade para sua empresa, ou fortalecendo sua campanha política — nossa missão é fazer com que sua mensagem chegue com força, seja lembrada e gere resultado. Aqui, cada projeto é tratado com dedicação e agilidade, porque sabemos que seu tempo e investimento merecem o melhor.
                 </p>
             </div>
 
